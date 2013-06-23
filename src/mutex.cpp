@@ -21,35 +21,61 @@ const adopt_lock_t  adopt_lock = {};
 
 mutex::~mutex()
 {
+#ifndef __DUETTO__
     pthread_mutex_destroy(&__m_);
+#endif
 }
 
 void
 mutex::lock()
 {
+#ifdef __DUETTO__
+    if(__m_)
+      client::console.log("Duetto: mutex::lock can't block");
+    else
+      __m_++;
+#else
     int ec = pthread_mutex_lock(&__m_);
     if (ec)
         __throw_system_error(ec, "mutex lock failed");
+#endif
 }
 
 bool
 mutex::try_lock() _NOEXCEPT
 {
+#ifdef __DUETTO__
+    if(__m_)
+      return false;
+    else
+    {
+      __m_++;
+      return true;
+    }
+#else
     return pthread_mutex_trylock(&__m_) == 0;
+#endif
 }
 
 void
 mutex::unlock() _NOEXCEPT
 {
+#ifdef __DUETTO__
+    __m_--;
+#else
     int ec = pthread_mutex_unlock(&__m_);
     (void)ec;
     assert(ec == 0);
+#endif
 }
 
 // recursive_mutex
 
 recursive_mutex::recursive_mutex()
 {
+#ifdef __DUETTO__
+    __m_ = 0;
+#else
     pthread_mutexattr_t attr;
     int ec = pthread_mutexattr_init(&attr);
     if (ec)
@@ -75,35 +101,51 @@ recursive_mutex::recursive_mutex()
     return;
 fail:
     __throw_system_error(ec, "recursive_mutex constructor failed");
+#endif
 }
 
 recursive_mutex::~recursive_mutex()
 {
+#ifndef __DUETTO__
     int e = pthread_mutex_destroy(&__m_);
     (void)e;
     assert(e == 0);
+#endif
 }
 
 void
 recursive_mutex::lock()
 {
+#ifdef __DUETTO__
+    __m_++;
+#else
     int ec = pthread_mutex_lock(&__m_);
     if (ec)
         __throw_system_error(ec, "recursive_mutex lock failed");
+#endif
 }
 
 void
 recursive_mutex::unlock() _NOEXCEPT
 {
+#ifdef __DUETTO__
+    __m_--;
+#else
     int e = pthread_mutex_unlock(&__m_);
     (void)e;
     assert(e == 0);
+#endif
 }
 
 bool
 recursive_mutex::try_lock() _NOEXCEPT
 {
+#ifdef __DUETTO__
+    __m_++;
+    return true;
+#else
     return pthread_mutex_trylock(&__m_) == 0;
+#endif
 }
 
 // timed_mutex
@@ -122,8 +164,13 @@ void
 timed_mutex::lock()
 {
     unique_lock<mutex> lk(__m_);
+#ifdef __DUETTO__
+    if (__locked_)
+        client::console.log("Duetto: timed_mutex::lock can't block");
+#else
     while (__locked_)
         __cv_.wait(lk);
+#endif
     __locked_ = true;
 }
 
@@ -144,14 +191,18 @@ timed_mutex::unlock() _NOEXCEPT
 {
     lock_guard<mutex> _(__m_);
     __locked_ = false;
+#ifndef __DUETTO__
     __cv_.notify_one();
+#endif
 }
 
 // recursive_timed_mutex
 
 recursive_timed_mutex::recursive_timed_mutex()
-    : __count_(0),
-      __id_(0)
+    : __count_(0)
+#ifndef __DUETTO__
+      ,__id_(0)
+#endif
 {
 }
 
@@ -163,26 +214,37 @@ recursive_timed_mutex::~recursive_timed_mutex()
 void
 recursive_timed_mutex::lock()
 {
+#ifndef __DUETTO__
     pthread_t id = pthread_self();
+#endif
     unique_lock<mutex> lk(__m_);
+#ifndef __DUETTO__
     if (pthread_equal(id, __id_))
+#endif
     {
         if (__count_ == numeric_limits<size_t>::max())
             __throw_system_error(EAGAIN, "recursive_timed_mutex lock limit reached");
         ++__count_;
         return;
     }
+#ifndef __DUETTO__
     while (__count_ != 0)
         __cv_.wait(lk);
     __count_ = 1;
     __id_ = id;
+#endif
 }
 
 bool
 recursive_timed_mutex::try_lock() _NOEXCEPT
 {
+#ifndef __DUETTO__
     pthread_t id = pthread_self();
+#endif
     unique_lock<mutex> lk(__m_, try_to_lock);
+#ifdef __DUETTO__
+    return true;
+#else
     if (lk.owns_lock() && (__count_ == 0 || pthread_equal(id, __id_)))
     {
         if (__count_ == numeric_limits<size_t>::max())
@@ -192,6 +254,7 @@ recursive_timed_mutex::try_lock() _NOEXCEPT
         return true;
     }
     return false;
+#endif
 }
 
 void
@@ -200,9 +263,13 @@ recursive_timed_mutex::unlock() _NOEXCEPT
     unique_lock<mutex> lk(__m_);
     if (--__count_ == 0)
     {
+#ifndef __DUETTO__
         __id_ = 0;
+#endif
         lk.unlock();
+#ifndef __DUETTO__
         __cv_.notify_one();
+#endif
     }
 }
 
@@ -212,6 +279,7 @@ recursive_timed_mutex::unlock() _NOEXCEPT
 // call into dispatch_once_f instead of here. Relevant radar this code needs to
 // keep in sync with:  7741191.
 
+#ifndef __DUETTO__
 static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t  cv  = PTHREAD_COND_INITIALIZER;
 
@@ -249,5 +317,5 @@ __call_once(volatile unsigned long& flag, void* arg, void(*func)(void*))
     else
         pthread_mutex_unlock(&mut);
 }
-
+#endif
 _LIBCPP_END_NAMESPACE_STD
