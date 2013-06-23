@@ -644,14 +644,18 @@ locale::id::__get()
 void
 locale::id::__init()
 {
+#ifdef __DUETTO__
+    __id_ = ++__next_id;
+#else
     __id_ = __sync_add_and_fetch(&__next_id, 1);
+#endif
 }
 
 // template <> class collate_byname<char>
 
 collate_byname<char>::collate_byname(const char* n, size_t refs)
-    : collate<char>(refs),
-      __l(newlocale(LC_ALL_MASK, n, 0))
+    : collate<char>(refs)
+      ,__l(newlocale(LC_ALL_MASK, n, 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -661,8 +665,8 @@ collate_byname<char>::collate_byname(const char* n, size_t refs)
 }
 
 collate_byname<char>::collate_byname(const string& name, size_t refs)
-    : collate<char>(refs),
-      __l(newlocale(LC_ALL_MASK, name.c_str(), 0))
+    : collate<char>(refs)
+      ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -702,8 +706,8 @@ collate_byname<char>::do_transform(const char_type* lo, const char_type* hi) con
 // template <> class collate_byname<wchar_t>
 
 collate_byname<wchar_t>::collate_byname(const char* n, size_t refs)
-    : collate<wchar_t>(refs),
-      __l(newlocale(LC_ALL_MASK, n, 0))
+    : collate<wchar_t>(refs)
+      ,__l(newlocale(LC_ALL_MASK, n, 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -713,8 +717,8 @@ collate_byname<wchar_t>::collate_byname(const char* n, size_t refs)
 }
 
 collate_byname<wchar_t>::collate_byname(const string& name, size_t refs)
-    : collate<wchar_t>(refs),
-      __l(newlocale(LC_ALL_MASK, name.c_str(), 0))
+    : collate<wchar_t>(refs)
+      ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -1172,8 +1176,8 @@ ctype<char>::__classic_upper_table() _NOEXCEPT
 // template <> class ctype_byname<char>
 
 ctype_byname<char>::ctype_byname(const char* name, size_t refs)
-    : ctype<char>(0, false, refs),
-      __l(newlocale(LC_ALL_MASK, name, 0))
+    : ctype<char>(0, false, refs)
+      ,__l(newlocale(LC_ALL_MASK, name, 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -1183,8 +1187,8 @@ ctype_byname<char>::ctype_byname(const char* name, size_t refs)
 }
 
 ctype_byname<char>::ctype_byname(const string& name, size_t refs)
-    : ctype<char>(0, false, refs),
-      __l(newlocale(LC_ALL_MASK, name.c_str(), 0))
+    : ctype<char>(0, false, refs)
+      ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -1208,7 +1212,9 @@ const char*
 ctype_byname<char>::do_toupper(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
+    {
         *low = static_cast<char>(toupper_l(static_cast<unsigned char>(*low), __l));
+    }
     return low;
 }
 
@@ -1222,15 +1228,17 @@ const char*
 ctype_byname<char>::do_tolower(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
+    {
         *low = static_cast<char>(tolower_l(static_cast<unsigned char>(*low), __l));
+    }
     return low;
 }
 
 // template <> class ctype_byname<wchar_t>
 
 ctype_byname<wchar_t>::ctype_byname(const char* name, size_t refs)
-    : ctype<wchar_t>(refs),
-      __l(newlocale(LC_ALL_MASK, name, 0))
+    : ctype<wchar_t>(refs)
+      ,__l(newlocale(LC_ALL_MASK, name, 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -1240,8 +1248,8 @@ ctype_byname<wchar_t>::ctype_byname(const char* name, size_t refs)
 }
 
 ctype_byname<wchar_t>::ctype_byname(const string& name, size_t refs)
-    : ctype<wchar_t>(refs),
-      __l(newlocale(LC_ALL_MASK, name.c_str(), 0))
+    : ctype<wchar_t>(refs)
+      ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
@@ -1292,8 +1300,8 @@ ctype_byname<wchar_t>::do_is(const char_type* low, const char_type* high, mask* 
                 *vec |= space;
 #ifndef _LIBCPP_CTYPE_MASK_IS_COMPOSITE_PRINT
             if (iswprint_l(ch, __l))
-                *vec |= print;
 #endif
+                *vec |= print;
             if (iswcntrl_l(ch, __l))
                 *vec |= cntrl;
             if (iswupper_l(ch, __l))
@@ -1302,16 +1310,16 @@ ctype_byname<wchar_t>::do_is(const char_type* low, const char_type* high, mask* 
                 *vec |= lower;
 #ifndef _LIBCPP_CTYPE_MASK_IS_COMPOSITE_ALPHA
             if (iswalpha_l(ch, __l))
-                *vec |= alpha;
 #endif
+                *vec |= alpha;
             if (iswdigit_l(ch, __l))
                 *vec |= digit;
             if (iswpunct_l(ch, __l))
                 *vec |= punct;
 #ifndef _LIBCPP_CTYPE_MASK_IS_COMPOSITE_XDIGIT
             if (iswxdigit_l(ch, __l))
-                *vec |= xdigit;
 #endif
+                *vec |= xdigit;
 #if !defined(__sun__)
             if (iswblank_l(ch, __l))
                 *vec |= blank;
@@ -1340,7 +1348,6 @@ ctype_byname<wchar_t>::do_scan_is(mask m, const char_type* low, const char_type*
         if ((m & digit) == digit && iswdigit_l(ch, __l)) break;
         if ((m & punct) == punct && iswpunct_l(ch, __l)) break;
         if ((m & xdigit) == xdigit && iswxdigit_l(ch, __l)) break;
-        if ((m & blank) == blank && iswblank_l(ch, __l)) break;
 #endif
     }
     return low;
@@ -1382,7 +1389,9 @@ const wchar_t*
 ctype_byname<wchar_t>::do_toupper(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
+    {
         *low = towupper_l(*low, __l);
+    }
     return low;
 }
 
@@ -1396,7 +1405,9 @@ const wchar_t*
 ctype_byname<wchar_t>::do_tolower(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
+    {
         *low = towlower_l(*low, __l);
+    }
     return low;
 }
 
@@ -1514,14 +1525,14 @@ codecvt<char, char, mbstate_t>::do_max_length() const  _NOEXCEPT
 locale::id codecvt<wchar_t, char, mbstate_t>::id;
 
 codecvt<wchar_t, char, mbstate_t>::codecvt(size_t refs)
-    : locale::facet(refs),
-      __l(_LIBCPP_GET_C_LOCALE)
+    : locale::facet(refs)
+      ,__l(_LIBCPP_GET_C_LOCALE)
 {
 }
 
 codecvt<wchar_t, char, mbstate_t>::codecvt(const char* nm, size_t refs)
-    : locale::facet(refs),
-      __l(newlocale(LC_ALL_MASK, nm, 0))
+    : locale::facet(refs)
+      ,__l(newlocale(LC_ALL_MASK, nm, 0))
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
     if (__l == 0)
