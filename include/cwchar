@@ -146,10 +146,10 @@ using ::putwc;
 using ::putwchar;
 using ::ungetwc;
 using ::wcstod;
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) && !defined(__DUETTO__)
 using ::wcstof;
 using ::wcstold;
-#endif // _MSC_VER
+#endif // !defined(_MSC_VER) && !defined(__DUETTO__)
 using ::wcstol;
 #ifndef _LIBCPP_HAS_NO_LONG_LONG
 using ::wcstoll;
