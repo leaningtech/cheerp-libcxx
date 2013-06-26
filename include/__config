@@ -109,6 +109,7 @@
 #ifdef __DUETTO__
 # define _LIBCPP_LITTLE_ENDIAN 1
 # define _LIBCPP_BIG_ENDIAN    0
+# define _LIBCPP_HAS_NO_LONG_LONG
 #endif
 
 #if !defined(_LIBCPP_LITTLE_ENDIAN) || !defined(_LIBCPP_BIG_ENDIAN)
