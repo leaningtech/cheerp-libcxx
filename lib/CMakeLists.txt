@@ -10,6 +10,8 @@ list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/mutex.cpp")
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/algorithm.cpp")
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/debug.cpp")
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/regex.cpp")
+# Duetto: Remove clock_gettime related stuff
+list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/chrono.cpp")
 if(WIN32)
   file(GLOB LIBCXX_WIN32_SOURCES ../src/support/win32/*.cpp)
   list(APPEND LIBCXX_SOURCES ${LIBCXX_WIN32_SOURCES})
