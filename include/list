@@ -526,7 +526,7 @@ protected:
     typedef typename __rebind_alloc_helper<__alloc_traits, __node_base>::type __node_base_allocator;
     typedef typename allocator_traits<__node_base_allocator>::pointer __node_base_pointer;
 
-    __node_base __end_;
+    __node __end_;
     __compressed_pair<size_type, __node_allocator> __size_alloc_;
 
     _LIBCPP_INLINE_VISIBILITY
