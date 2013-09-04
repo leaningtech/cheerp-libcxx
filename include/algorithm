@@ -3022,6 +3022,7 @@ public:
             {return !(__x == __y);}
 };
 
+#ifndef __DUETTO__
 template<class _IntType>
 template<class _URNG>
 typename uniform_int_distribution<_IntType>::result_type
@@ -3047,6 +3048,7 @@ uniform_int_distribution<_IntType>::operator()(_URNG& __g, const param_type& __p
     } while (__u >= _Rp);
     return static_cast<result_type>(__u + __p.a());
 }
+#endif
 
 class _LIBCPP_TYPE_VIS __rs_default;
 
