@@ -167,8 +167,10 @@ typename enable_if<_Sz == 8, void>::type
 __check_for_overflow(size_t N)
 {
 #ifndef _LIBCPP_NO_EXCEPTIONS
+#ifndef __DUETTO__
     if (N > 0xFFFFFFFFFFFFFFC5ull)
         throw overflow_error("__next_prime overflow");
+#endif
 #else
     (void)N;
 #endif
