@@ -1,6 +1,25 @@
 // -*- C++ -*-
 //===------------------------ functional ----------------------------------===//
 //
+// Copyright (C) 2013 Alessandro Pignotti <alessandro@leaningtech.com>
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+//
+// This file incorporates work covered by the following copyright and
+// permission notice:
+//
 //                     The LLVM Compiler Infrastructure
 //
 // This file is dual licensed under the MIT and the University of Illinois Open
@@ -970,7 +989,9 @@ public:
     _LIBCPP_INLINE_VISIBILITY __base() {}
     _LIBCPP_INLINE_VISIBILITY virtual ~__base() {}
     virtual __base* __clone() const = 0;
+#ifndef __DUETTO__
     virtual void __clone(__base*) const = 0;
+#endif
     virtual void destroy() _NOEXCEPT = 0;
     virtual void destroy_deallocate() _NOEXCEPT = 0;
     virtual _Rp operator()(_ArgTypes&& ...) = 0;
@@ -1007,7 +1028,9 @@ public:
         : __f_(piecewise_construct, _VSTD::forward_as_tuple(_VSTD::move(__f)),
                                     _VSTD::forward_as_tuple(_VSTD::move(__a))) {}
     virtual __base<_Rp(_ArgTypes...)>* __clone() const;
+#ifndef __DUETTO__
     virtual void __clone(__base<_Rp(_ArgTypes...)>*) const;
+#endif
     virtual void destroy() _NOEXCEPT;
     virtual void destroy_deallocate() _NOEXCEPT;
     virtual _Rp operator()(_ArgTypes&& ... __arg);
@@ -1029,12 +1052,14 @@ __func<_Fp, _Alloc, _Rp(_ArgTypes...)>::__clone() const
     return __hold.release();
 }
 
+#ifndef __DUETTO__
 template<class _Fp, class _Alloc, class _Rp, class ..._ArgTypes>
 void
 __func<_Fp, _Alloc, _Rp(_ArgTypes...)>::__clone(__base<_Rp(_ArgTypes...)>* __p) const
 {
     ::new (__p) __func(__f_.first(), __f_.second());
 }
+#endif
 
 template<class _Fp, class _Alloc, class _Rp, class ..._ArgTypes>
 void
@@ -1088,7 +1113,9 @@ class _LIBCPP_TYPE_VIS function<_Rp(_ArgTypes...)>
       public __function::__maybe_derive_from_binary_function<_Rp(_ArgTypes...)>
 {
     typedef __function::__base<_Rp(_ArgTypes...)> __base;
+#ifndef __DUETTO__
     typename aligned_storage<3*sizeof(void*)>::type __buf_;
+#endif
     __base* __f_;
 
     template <class _Fp>
@@ -1206,11 +1233,13 @@ function<_Rp(_ArgTypes...)>::function(const function& __f)
 {
     if (__f.__f_ == 0)
         __f_ = 0;
+#ifndef __DUETTO__
     else if (__f.__f_ == (const __base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
         __f.__f_->__clone(__f_);
     }
+#endif
     else
         __f_ = __f.__f_->__clone();
 }
@@ -1222,11 +1251,13 @@ function<_Rp(_ArgTypes...)>::function(allocator_arg_t, const _Alloc&,
 {
     if (__f.__f_ == 0)
         __f_ = 0;
+#ifndef __DUETTO__
     else if (__f.__f_ == (const __base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
         __f.__f_->__clone(__f_);
     }
+#endif
     else
         __f_ = __f.__f_->__clone();
 }
@@ -1236,11 +1267,13 @@ function<_Rp(_ArgTypes...)>::function(function&& __f) _NOEXCEPT
 {
     if (__f.__f_ == 0)
         __f_ = 0;
+#ifndef __DUETTO__
     else if (__f.__f_ == (__base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
         __f.__f_->__clone(__f_);
     }
+#endif
     else
     {
         __f_ = __f.__f_;
@@ -1255,11 +1288,13 @@ function<_Rp(_ArgTypes...)>::function(allocator_arg_t, const _Alloc&,
 {
     if (__f.__f_ == 0)
         __f_ = 0;
+#ifndef __DUETTO__
     else if (__f.__f_ == (__base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
         __f.__f_->__clone(__f_);
     }
+#endif
     else
     {
         __f_ = __f.__f_;
@@ -1280,12 +1315,14 @@ function<_Rp(_ArgTypes...)>::function(_Fp __f,
     if (__not_null(__f))
     {
         typedef __function::__func<_Fp, allocator<_Fp>, _Rp(_ArgTypes...)> _FF;
+#ifndef __DUETTO__
         if (sizeof(_FF) <= sizeof(__buf_) && is_nothrow_copy_constructible<_Fp>::value)
         {
             __f_ = (__base*)&__buf_;
             ::new (__f_) _FF(_VSTD::move(__f));
         }
         else
+#endif
         {
             typedef allocator<_FF> _Ap;
             _Ap __a;
@@ -1307,12 +1344,14 @@ function<_Rp(_ArgTypes...)>::function(allocator_arg_t, const _Alloc& __a0, _Fp _
     if (__not_null(__f))
     {
         typedef __function::__func<_Fp, _Alloc, _Rp(_ArgTypes...)> _FF;
+#ifndef __DUETTO__
         if (sizeof(_FF) <= sizeof(__buf_) && is_nothrow_copy_constructible<_Fp>::value)
         {
             __f_ = (__base*)&__buf_;
             ::new (__f_) _FF(_VSTD::move(__f));
         }
         else
+#endif
         {
             typedef typename __alloc_traits::template
 #ifndef _LIBCPP_HAS_NO_TEMPLATE_ALIASES
@@ -1342,18 +1381,23 @@ template<class _Rp, class ..._ArgTypes>
 function<_Rp(_ArgTypes...)>&
 function<_Rp(_ArgTypes...)>::operator=(function&& __f) _NOEXCEPT
 {
+#ifndef __DUETTO__
     if (__f_ == (__base*)&__buf_)
         __f_->destroy();
-    else if (__f_)
+    else
+#endif
+    if (__f_)
         __f_->destroy_deallocate();
     __f_ = 0;
     if (__f.__f_ == 0)
         __f_ = 0;
+#ifndef __DUETTO__
     else if (__f.__f_ == (__base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
         __f.__f_->__clone(__f_);
     }
+#endif
     else
     {
         __f_ = __f.__f_;
@@ -1366,9 +1410,12 @@ template<class _Rp, class ..._ArgTypes>
 function<_Rp(_ArgTypes...)>&
 function<_Rp(_ArgTypes...)>::operator=(nullptr_t) _NOEXCEPT
 {
+#ifndef __DUETTO__
     if (__f_ == (__base*)&__buf_)
         __f_->destroy();
-    else if (__f_)
+    else
+#endif
+    if (__f_)
         __f_->destroy_deallocate();
     __f_ = 0;
     return *this;
@@ -1391,9 +1438,12 @@ function<_Rp(_ArgTypes...)>::operator=(_Fp&& __f)
 template<class _Rp, class ..._ArgTypes>
 function<_Rp(_ArgTypes...)>::~function()
 {
+#ifndef __DUETTO__
     if (__f_ == (__base*)&__buf_)
         __f_->destroy();
-    else if (__f_)
+    else
+#endif
+    if (__f_)
         __f_->destroy_deallocate();
 }
 
@@ -1401,6 +1451,7 @@ template<class _Rp, class ..._ArgTypes>
 void
 function<_Rp(_ArgTypes...)>::swap(function& __f) _NOEXCEPT
 {
+#ifndef __DUETTO__
     if (__f_ == (__base*)&__buf_ && __f.__f_ == (__base*)&__f.__buf_)
     {
         typename aligned_storage<sizeof(__buf_)>::type __tempbuf;
@@ -1431,6 +1482,7 @@ function<_Rp(_ArgTypes...)>::swap(function& __f) _NOEXCEPT
         __f_ = (__base*)&__buf_;
     }
     else
+#endif
         _VSTD::swap(__f_, __f.__f_);
 }
 
