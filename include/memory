@@ -1,6 +1,25 @@
 // -*- C++ -*-
 //===-------------------------- memory ------------------------------------===//
 //
+// Copyright (C) 2013 Alessandro Pignotti <alessandro@leaningtech.com>
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+//
+// This file incorporates work covered by the following copyright and
+// permission notice:
+//
 //                     The LLVM Compiler Infrastructure
 //
 // This file is dual licensed under the MIT and the University of Illinois Open
@@ -3405,11 +3424,7 @@ struct __scalar_hash<_Tp, 2>
         union
         {
             _Tp __t;
-            struct
-            {
-                size_t __a;
-                size_t __b;
-            };
+            size_t __a[2];
         } __u;
         __u.__t = __v;
         return __murmur2_or_cityhash<size_t>()(&__u, sizeof(__u));
@@ -3426,12 +3441,7 @@ struct __scalar_hash<_Tp, 3>
         union
         {
             _Tp __t;
-            struct
-            {
-                size_t __a;
-                size_t __b;
-                size_t __c;
-            };
+            size_t __a[3];
         } __u;
         __u.__t = __v;
         return __murmur2_or_cityhash<size_t>()(&__u, sizeof(__u));
@@ -3448,13 +3458,7 @@ struct __scalar_hash<_Tp, 4>
         union
         {
             _Tp __t;
-            struct
-            {
-                size_t __a;
-                size_t __b;
-                size_t __c;
-                size_t __d;
-            };
+            size_t __a[4];
         } __u;
         __u.__t = __v;
         return __murmur2_or_cityhash<size_t>()(&__u, sizeof(__u));
