@@ -161,6 +161,7 @@ exception_ptr::exception_ptr(const exception_ptr& other) _NOEXCEPT
 #endif  // __APPLE__
 }
 
+#ifndef __DUETTO__
 exception_ptr& exception_ptr::operator=(const exception_ptr& other) _NOEXCEPT
 {
 #if HAVE_DEPENDENT_EH_ABI
@@ -176,6 +177,7 @@ exception_ptr& exception_ptr::operator=(const exception_ptr& other) _NOEXCEPT
     ::abort();
 #endif  // __APPLE__
 }
+#endif
 
 nested_exception::nested_exception() _NOEXCEPT
     : __ptr_(current_exception())
@@ -186,6 +188,7 @@ nested_exception::~nested_exception() _NOEXCEPT
 {
 }
 
+#ifndef __DUETTO__
 _LIBCPP_NORETURN
 void
 nested_exception::rethrow_nested() const
@@ -194,6 +197,7 @@ nested_exception::rethrow_nested() const
         terminate();
     rethrow_exception(__ptr_);
 }
+#endif
 
 
 exception_ptr current_exception() _NOEXCEPT
