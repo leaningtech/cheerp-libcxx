@@ -133,11 +133,11 @@ public:
     exception_ptr& operator=(const exception_ptr&) _NOEXCEPT;
     ~exception_ptr() _NOEXCEPT;
 
+#ifndef __DUETTO__
     _LIBCPP_INLINE_VISIBILITY
     _LIBCPP_EXPLICIT
         operator bool() const _NOEXCEPT {return __ptr_ != nullptr;}
 
-#ifndef __DUETTO__
     friend _LIBCPP_INLINE_VISIBILITY
     bool operator==(const exception_ptr& __x, const exception_ptr& __y) _NOEXCEPT
         {return __x.__ptr_ == __y.__ptr_;}
