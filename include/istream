@@ -165,7 +165,7 @@ _LIBCPP_BEGIN_NAMESPACE_STD
 
 template <class _CharT, class _Traits>
 class _LIBCPP_TYPE_VIS_ONLY basic_istream
-    : virtual public basic_ios<_CharT, _Traits>
+    : /*virtual */public basic_ios<_CharT, _Traits>
 {
     streamsize __gc_;
 public:
@@ -1457,8 +1457,8 @@ operator>>(basic_istream<_CharT, _Traits>&& __is, _Tp& __x)
 
 template <class _CharT, class _Traits>
 class _LIBCPP_TYPE_VIS_ONLY basic_iostream
-    : public basic_istream<_CharT, _Traits>,
-      public basic_ostream<_CharT, _Traits>
+    : public basic_istream<_CharT, _Traits>/*,
+      public basic_ostream<_CharT, _Traits>*/
 {
 public:
     // types:
