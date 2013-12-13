@@ -344,13 +344,11 @@ typedef __char32_t char32_t;
 #endif
 
 // Inline namespaces are available in Clang regardless of C++ dialect.
-#define _LIBCPP_BEGIN_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {
-#define _LIBCPP_END_NAMESPACE_STD  } }
-#define _VSTD std::_LIBCPP_NAMESPACE
+#define _LIBCPP_BEGIN_NAMESPACE_STD namespace std {
+#define _LIBCPP_END_NAMESPACE_STD  }
+#define _VSTD std
 
 namespace std {
-  inline namespace _LIBCPP_NAMESPACE {
-  }
 }
 
 #elif defined(__GNUC__)
