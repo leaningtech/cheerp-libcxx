@@ -60,9 +60,14 @@ inline
 T&
 make(A0 a0)
 {
+#ifdef __DUETTO__
+    static T t(a0);
+    return t;
+#else
     static typename aligned_storage<sizeof(T)>::type buf;
     ::new (&buf) T(a0);
     return *(T*)&buf;
+#endif
 }
 
 template <class T, class A0, class A1>
@@ -70,9 +75,14 @@ inline
 T&
 make(A0 a0, A1 a1)
 {
+#ifdef __DUETTO__
+    static T t(a0, a1);
+    return t;
+#else
     static typename aligned_storage<sizeof(T)>::type buf;
     ::new (&buf) T(a0, a1);
     return *(T*)&buf;
+#endif
 }
 
 template <class T, class A0, class A1, class A2>
@@ -80,9 +90,14 @@ inline
 T&
 make(A0 a0, A1 a1, A2 a2)
 {
+#ifdef __DUETTO__
+    static T t(a0, a1, a2);
+    return t;
+#else
     static typename aligned_storage<sizeof(T)>::type buf;
     ::new (&buf) T(a0, a1, a2);
     return *(T*)&buf;
+#endif
 }
 
 template <typename T, size_t N>
@@ -438,8 +453,13 @@ const locale&
 locale::__imp::make_classic()
 {
     // only one thread can get in here and it only gets in once
+#ifdef __DUETTO__
+    static locale l [[noinit]];
+    locale* c = &l;
+#else
     static aligned_storage<sizeof(locale)>::type buf;
     locale* c = (locale*)&buf;
+#endif
     c->__locale_ = &make<__imp>(1u);
     return *c;
 }
@@ -455,9 +475,14 @@ locale&
 locale::__imp::make_global()
 {
     // only one thread can get in here and it only gets in once
+#ifdef __DUETTO__
+    static locale l(locale::classic());
+    return l;
+#else
     static aligned_storage<sizeof(locale)>::type buf;
     ::new (&buf) locale(locale::classic());
     return *(locale*)&buf;
+#endif
 }
 
 locale&
