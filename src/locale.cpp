@@ -136,7 +136,11 @@ class _LIBCPP_HIDDEN locale::__imp
     : public facet
 {
     enum {N = 28};
+#ifdef __DUETTO__
+    vector<facet*> facets_;
+#else
     vector<facet*, __sso_allocator<facet*, N> > facets_;
+#endif
     string         name_;
 public:
     explicit __imp(size_t refs = 0);
