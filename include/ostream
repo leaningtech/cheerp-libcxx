@@ -149,7 +149,7 @@ _LIBCPP_BEGIN_NAMESPACE_STD
 
 template <class _CharT, class _Traits>
 class _LIBCPP_TYPE_VIS_ONLY basic_ostream
-    : virtual public basic_ios<_CharT, _Traits>
+    : /*virtual */public basic_ios<_CharT, _Traits>
 {
 public:
     // types (inherited from basic_ios (27.5.4)):
