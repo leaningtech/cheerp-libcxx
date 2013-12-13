@@ -9,8 +9,10 @@
 
 #define _LIBCPP_BUILDING_MEMORY
 #include "memory"
+#ifndef __DUETTO__
 #include "mutex"
 #include "thread"
+#endif
 
 _LIBCPP_BEGIN_NAMESPACE_STD
 
@@ -119,7 +121,7 @@ __shared_weak_count::__get_deleter(const type_info&) const _NOEXCEPT
 
 #endif  // _LIBCPP_NO_RTTI
 
-#if __has_feature(cxx_atomic)
+#if __has_feature(cxx_atomic) && !defined(__DUETTO__)
 
 static const std::size_t __sp_mut_count = 16;
 static pthread_mutex_t mut_back_imp[__sp_mut_count] =
