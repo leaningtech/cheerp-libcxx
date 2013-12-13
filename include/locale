@@ -189,7 +189,9 @@ template <class charT> class messages_byname;
 #ifdef _WIN32
 #include <support/win32/locale_win32.h>
 #else // _WIN32
+#ifndef __DUETTO__
 #include <nl_types.h>
+#endif
 #endif  // !_WIN32
 
 #ifdef __APPLE__
@@ -204,7 +206,7 @@ template <class charT> class messages_byname;
 
 _LIBCPP_BEGIN_NAMESPACE_STD
 
-#if defined(__APPLE__) || defined(__FreeBSD__)
+#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__DUETTO__)
 #  define _LIBCPP_GET_C_LOCALE 0
 #elif defined(__NetBSD__)
 #  define _LIBCPP_GET_C_LOCALE LC_C_LOCALE
@@ -837,7 +839,11 @@ __num_get_signed_integral(const char* __a, const char* __a_end,
         typename remove_reference<decltype(errno)>::type __save_errno = errno;
         errno = 0;
         char *__p2;
+#ifdef __DUETTO__
+        long long __ll = strtoll(__a, &__p2, __base);
+#else
         long long __ll = strtoll_l(__a, &__p2, __base, _LIBCPP_GET_C_LOCALE);
+#endif
         typename remove_reference<decltype(errno)>::type __current_errno = errno;
         if (__current_errno == 0)
             errno = __save_errno;
@@ -877,7 +883,11 @@ __num_get_unsigned_integral(const char* __a, const char* __a_end,
         typename remove_reference<decltype(errno)>::type __save_errno = errno;
         errno = 0;
         char *__p2;
+#ifdef __DUETTO__
+        unsigned long long __ll = strtoull(__a, &__p2, __base);
+#else
         unsigned long long __ll = strtoull_l(__a, &__p2, __base, _LIBCPP_GET_C_LOCALE);
+#endif
         typename remove_reference<decltype(errno)>::type __current_errno = errno;
         if (__current_errno == 0)
             errno = __save_errno;
@@ -907,7 +917,11 @@ __num_get_float(const char* __a, const char* __a_end, ios_base::iostate& __err)
         typename remove_reference<decltype(errno)>::type __save_errno = errno;
         errno = 0;
         char *__p2;
+#ifdef __DUETTO__
+        long double __ld = strtold(__a, &__p2);
+#else
         long double __ld = strtold_l(__a, &__p2, _LIBCPP_GET_C_LOCALE);
+#endif
         typename remove_reference<decltype(errno)>::type __current_errno = errno;
         if (__current_errno == 0)
             errno = __save_errno;
@@ -1439,6 +1453,8 @@ num_get<_CharT, _InputIterator>::do_get(iter_type __b, iter_type __e,
     __a[sizeof(__a)-1] = 0;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     if (sscanf_l(__a, _LIBCPP_GET_C_LOCALE, "%p", &__v) != 1)
+#elif defined(__DUETTO__)
+    if (sscanf(__a, "%p", &__v) != 1)
 #else
     if (__sscanf_l(__a, __cloc(), "%p", &__v) != 1)
 #endif
@@ -1546,13 +1562,21 @@ __num_put<_CharT>::__widen_and_group_float(char* __nb, char* __np, char* __ne,
         *__oe++ = __ct.widen(*__nf++);
         *__oe++ = __ct.widen(*__nf++);
         for (__ns = __nf; __ns < __ne; ++__ns)
+#ifdef __DUETTO__
+            if (!isxdigit(*__ns))
+#else
             if (!isxdigit_l(*__ns, _LIBCPP_GET_C_LOCALE))
+#endif
                 break;
     }
     else
     {
         for (__ns = __nf; __ns < __ne; ++__ns)
+#ifdef __DUETTO__
+            if (!isdigit(*__ns))
+#else
             if (!isdigit_l(*__ns, _LIBCPP_GET_C_LOCALE))
+#endif
                 break;
     }
     if (__grouping.empty())
@@ -1804,6 +1828,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
     char __nar[__nbuf];
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     int __nc = sprintf_l(__nar, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+    int __nc = sprintf(__nar, __fmt, __v);
 #else
     int __nc = __sprintf_l(__nar, __cloc(), __fmt, __v);
 #endif
@@ -1834,6 +1860,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
     char __nar[__nbuf];
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     int __nc = sprintf_l(__nar, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+    int __nc = sprintf(__nar, __fmt, __v);
 #else
     int __nc = __sprintf_l(__nar, __cloc(), __fmt, __v);
 #endif
@@ -1864,6 +1892,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
     char __nar[__nbuf];
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     int __nc = sprintf_l(__nar, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+    int __nc = sprintf(__nar, __fmt, __v);
 #else
     int __nc = __sprintf_l(__nar, __cloc(), __fmt, __v);
 #endif
@@ -1894,6 +1924,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
     char __nar[__nbuf];
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     int __nc = sprintf_l(__nar, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+    int __nc = sprintf(__nar, __fmt, __v);
 #else
     int __nc = __sprintf_l(__nar, __cloc(), __fmt, __v);
 #endif
@@ -1926,6 +1958,9 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         __nc = snprintf_l(__nb, __nbuf, _LIBCPP_GET_C_LOCALE, __fmt,
                                    (int)__iob.precision(), __v);
+#elif defined(__DUETTO__)
+        __nc = snprintf(__nb, __nbuf, __fmt,
+                            (int)__iob.precision(), __v);
 #else
         __nc = __snprintf_l(__nb, __nbuf, __cloc(), __fmt,
                             (int)__iob.precision(), __v);
@@ -1933,6 +1968,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
     else
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         __nc = snprintf_l(__nb, __nbuf, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+        __nc = snprintf(__nb, __nbuf, __fmt, __v);
 #else
         __nc = __snprintf_l(__nb, __nbuf, __cloc(), __fmt, __v);
 #endif
@@ -1942,6 +1979,9 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
         if (__specify_precision)
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
             __nc = asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, (int)__iob.precision(), __v);
+#elif defined(__DUETTO__)
+            __nc = asprintf(&__nb, __fmt,
+                              (int)__iob.precision(), __v);
 #else
             __nc = __asprintf_l(&__nb, __cloc(), __fmt,
                               (int)__iob.precision(), __v);
@@ -1949,6 +1989,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
         else
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
             __nc = asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+            __nc = asprintf(&__nb, __fmt, (int)__iob.precision(), __v);
 #else
             __nc = __asprintf_l(&__nb, __cloc(), __fmt, (int)__iob.precision(), __v);
 #endif
@@ -1995,6 +2037,9 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         __nc = snprintf_l(__nb, __nbuf, _LIBCPP_GET_C_LOCALE, __fmt,
                                    (int)__iob.precision(), __v);
+#elif defined(__DUETTO__)
+        __nc = snprintf(__nb, __nbuf, __fmt,
+                            (int)__iob.precision(), __v);
 #else
         __nc = __snprintf_l(__nb, __nbuf, __cloc(), __fmt,
                             (int)__iob.precision(), __v);
@@ -2002,6 +2047,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
     else
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         __nc = snprintf_l(__nb, __nbuf, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+        __nc = snprintf(__nb, __nbuf, __fmt, __v);
 #else
         __nc = __snprintf_l(__nb, __nbuf, __cloc(), __fmt, __v);
 #endif
@@ -2011,6 +2058,9 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
         if (__specify_precision)
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
             __nc = asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, (int)__iob.precision(), __v);
+#elif defined(__DUETTO__)
+            __nc = asprintf(&__nb, __fmt,
+                              (int)__iob.precision(), __v);
 #else
             __nc = __asprintf_l(&__nb, __cloc(), __fmt,
                               (int)__iob.precision(), __v);
@@ -2018,6 +2068,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
         else
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
             __nc = asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+            __nc = asprintf(&__nb, __fmt, __v);
 #else
             __nc = __asprintf_l(&__nb, __cloc(), __fmt, __v);
 #endif
@@ -2058,6 +2110,8 @@ num_put<_CharT, _OutputIterator>::do_put(iter_type __s, ios_base& __iob,
     char __nar[__nbuf];
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     int __nc = sprintf_l(__nar, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+#elif defined(__DUETTO__)
+    int __nc = sprintf(__nar, __fmt, __v);
 #else
     int __nc = __sprintf_l(__nar, __cloc(), __fmt, __v);
 #endif
@@ -3769,6 +3823,8 @@ money_put<_CharT, _OutputIterator>::do_put(iter_type __s, bool __intl,
     {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         __n = static_cast<size_t>(asprintf_l(&__bb, _LIBCPP_GET_C_LOCALE, "%.0Lf", __units));
+#elif defined(__DUETTO__)
+        __n = asprintf(&__bb, "%.0Lf", __units);
 #else
         __n = __asprintf_l(&__bb, __cloc(), "%.0Lf", __units);
 #endif
@@ -3924,7 +3980,7 @@ template <class _CharT>
 typename messages<_CharT>::catalog
 messages<_CharT>::do_open(const basic_string<char>& __nm, const locale&) const
 {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__DUETTO__)
     return -1;
 #else // _WIN32
     catalog __cat = (catalog)catopen(__nm.c_str(), NL_CAT_LOCALE);
@@ -3939,7 +3995,7 @@ typename messages<_CharT>::string_type
 messages<_CharT>::do_get(catalog __c, int __set, int __msgid,
                          const string_type& __dflt) const
 {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__DUETTO__)
     return __dflt;
 #else // _WIN32
     string __ndflt;
@@ -3961,7 +4017,7 @@ template <class _CharT>
 void
 messages<_CharT>::do_close(catalog __c) const
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__DUETTO__)
     if (__c != -1)
         __c <<= 1;
     nl_catd __cat = (nl_catd)__c;
