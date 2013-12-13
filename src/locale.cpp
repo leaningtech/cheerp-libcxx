@@ -64,7 +64,11 @@ inline
 T&
 make(A0 a0)
 {
+#ifdef __DUETTO__
+    static T buf [[noinit]];
+#else
     static typename aligned_storage<sizeof(T)>::type buf;
+#endif
     ::new (&buf) T(a0);
     return *reinterpret_cast<T*>(&buf);
 }
@@ -74,7 +78,11 @@ inline
 T&
 make(A0 a0, A1 a1)
 {
+#ifdef __DUETTO__
+    static T buf [[noinit]];
+#else
     static typename aligned_storage<sizeof(T)>::type buf;
+#endif
     ::new (&buf) T(a0, a1);
     return *reinterpret_cast<T*>(&buf);
 }
@@ -84,7 +92,11 @@ inline
 T&
 make(A0 a0, A1 a1, A2 a2)
 {
+#ifdef __DUETTO__
+    static T buf [[noinit]];
+#else
     static typename aligned_storage<sizeof(T)>::type buf;
+#endif
     ::new (&buf) T(a0, a1, a2);
     return *reinterpret_cast<T*>(&buf);
 }
@@ -458,7 +470,11 @@ const locale&
 locale::__imp::make_classic()
 {
     // only one thread can get in here and it only gets in once
+#ifdef __DUETTO__
+    static locale buf [[noinit]];
+#else
     static aligned_storage<sizeof(locale)>::type buf;
+#endif
     locale* c = reinterpret_cast<locale*>(&buf);
     c->__locale_ = &make<__imp>(1u);
     return *c;
@@ -475,7 +491,11 @@ locale&
 locale::__imp::make_global()
 {
     // only one thread can get in here and it only gets in once
+#ifdef __DUETTO__
+    static locale buf [[noinit]];
+#else
     static aligned_storage<sizeof(locale)>::type buf;
+#endif
     ::new (&buf) locale(locale::classic());
     return *reinterpret_cast<locale*>(&buf);
 }

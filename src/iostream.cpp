@@ -14,49 +14,49 @@
 _LIBCPP_BEGIN_NAMESPACE_STD
 
 #ifndef _LIBCPP_HAS_NO_STDIN
-_ALIGNAS_TYPE (istream)  _LIBCPP_FUNC_VIS char cin [sizeof(istream)];
-_ALIGNAS_TYPE (__stdinbuf<char> ) static char __cin [sizeof(__stdinbuf <char>)];
+_LIBCPP_FUNC_VIS istream cin [[noinit]];
+static __stdinbuf<char> __cin [[noinit]];
 static mbstate_t mb_cin;
-_ALIGNAS_TYPE (wistream) _LIBCPP_FUNC_VIS char wcin [sizeof(wistream)];
-_ALIGNAS_TYPE (__stdinbuf<wchar_t> ) static char __wcin [sizeof(__stdinbuf <wchar_t>)];
+_LIBCPP_FUNC_VIS wistream wcin  [[noinit]];
+static __stdinbuf<wchar_t>  __wcin [[noinit]];
 static mbstate_t mb_wcin;
 #endif
 
 #ifndef _LIBCPP_HAS_NO_STDOUT
-_ALIGNAS_TYPE (ostream)  _LIBCPP_FUNC_VIS char cout[sizeof(ostream)];
-_ALIGNAS_TYPE (__stdoutbuf<char>) static char __cout[sizeof(__stdoutbuf<char>)];
+_LIBCPP_FUNC_VIS ostream cout [[noinit]];
+static __stdoutbuf<char> __cout [[noinit]];
 static mbstate_t mb_cout;
-_ALIGNAS_TYPE (wostream) _LIBCPP_FUNC_VIS char wcout[sizeof(wostream)];
-_ALIGNAS_TYPE (__stdoutbuf<wchar_t>) static char __wcout[sizeof(__stdoutbuf<wchar_t>)];
+_LIBCPP_FUNC_VIS wostream wcout [[noinit]];
+static __stdoutbuf<wchar_t> __wcout [[noinit]];
 static mbstate_t mb_wcout;
 #endif
 
-_ALIGNAS_TYPE (ostream)  _LIBCPP_FUNC_VIS char cerr[sizeof(ostream)];
-_ALIGNAS_TYPE (__stdoutbuf<char>) static char __cerr[sizeof(__stdoutbuf<char>)];
+_LIBCPP_FUNC_VIS ostream cerr [[noinit]];
+static __stdoutbuf<char> __cerr [[noinit]];
 static mbstate_t mb_cerr;
-_ALIGNAS_TYPE (wostream) _LIBCPP_FUNC_VIS char wcerr[sizeof(wostream)];
-_ALIGNAS_TYPE (__stdoutbuf<wchar_t>) static char __wcerr[sizeof(__stdoutbuf<wchar_t>)];
+_LIBCPP_FUNC_VIS wostream wcerr [[noinit]];
+static __stdoutbuf<wchar_t> __wcerr [[noinit]];
 static mbstate_t mb_wcerr;
 
-_ALIGNAS_TYPE (ostream)  _LIBCPP_FUNC_VIS char clog[sizeof(ostream)];
-_ALIGNAS_TYPE (wostream) _LIBCPP_FUNC_VIS char wclog[sizeof(wostream)];
+_LIBCPP_FUNC_VIS ostream clog [[noinit]];
+_LIBCPP_FUNC_VIS wostream wclog [[noinit]];
 
 ios_base::Init __start_std_streams;
 
 ios_base::Init::Init()
 {
 #ifndef _LIBCPP_HAS_NO_STDIN
-    istream* cin_ptr  = ::new(cin)  istream(::new(__cin)  __stdinbuf <char>(stdin, &mb_cin));
-    wistream* wcin_ptr  = ::new(wcin)  wistream(::new(__wcin)  __stdinbuf <wchar_t>(stdin, &mb_wcin));
+    istream* cin_ptr  = ::new(&cin)  istream(::new(&__cin)  __stdinbuf <char>(stdin, &mb_cin));
+    wistream* wcin_ptr  = ::new(&wcin)  wistream(::new(&__wcin)  __stdinbuf <wchar_t>(stdin, &mb_wcin));
 #endif
 #ifndef _LIBCPP_HAS_NO_STDOUT
-    ostream* cout_ptr = ::new(cout) ostream(::new(__cout) __stdoutbuf<char>(stdout, &mb_cout));
-    wostream* wcout_ptr = ::new(wcout) wostream(::new(__wcout) __stdoutbuf<wchar_t>(stdout, &mb_wcout));
+    ostream* cout_ptr = ::new(&cout) ostream(::new(&__cout) __stdoutbuf<char>(stdout, &mb_cout));
+    wostream* wcout_ptr = ::new(&wcout) wostream(::new(&__wcout) __stdoutbuf<wchar_t>(stdout, &mb_wcout));
 #endif
-    ostream* cerr_ptr = ::new(cerr) ostream(::new(__cerr) __stdoutbuf<char>(stderr, &mb_cerr));
-                        ::new(clog) ostream(cerr_ptr->rdbuf());
-    wostream* wcerr_ptr = ::new(wcerr) wostream(::new(__wcerr) __stdoutbuf<wchar_t>(stderr, &mb_wcerr));
-                          ::new(wclog) wostream(wcerr_ptr->rdbuf());
+    ostream* cerr_ptr = ::new(&cerr) ostream(::new(&__cerr) __stdoutbuf<char>(stderr, &mb_cerr));
+                        ::new(&clog) ostream(cerr_ptr->rdbuf());
+    wostream* wcerr_ptr = ::new(&wcerr) wostream(::new(&__wcerr) __stdoutbuf<wchar_t>(stderr, &mb_wcerr));
+                          ::new(&wclog) wostream(wcerr_ptr->rdbuf());
 
 #if !defined(_LIBCPP_HAS_NO_STDIN) && !defined(_LIBCPP_HAS_NO_STDOUT)
     cin_ptr->tie(cout_ptr);
@@ -73,14 +73,14 @@ ios_base::Init::Init()
 ios_base::Init::~Init()
 {
 #ifndef _LIBCPP_HAS_NO_STDOUT
-    ostream* cout_ptr = reinterpret_cast<ostream*>(cout);
-    wostream* wcout_ptr = reinterpret_cast<wostream*>(wcout);
+    ostream* cout_ptr = reinterpret_cast<ostream*>(&cout);
+    wostream* wcout_ptr = reinterpret_cast<wostream*>(&wcout);
     cout_ptr->flush();
     wcout_ptr->flush();
 #endif
 
-    ostream* clog_ptr = reinterpret_cast<ostream*>(clog);
-    wostream* wclog_ptr = reinterpret_cast<wostream*>(wclog);
+    ostream* clog_ptr = reinterpret_cast<ostream*>(&clog);
+    wostream* wclog_ptr = reinterpret_cast<wostream*>(&wclog);
     clog_ptr->flush();
     wclog_ptr->flush();
 }
