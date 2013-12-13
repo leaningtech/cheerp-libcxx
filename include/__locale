@@ -268,8 +268,8 @@ public:
 
     static locale::id id;
 
-protected:
     ~collate();
+protected:
     virtual int do_compare(const char_type* __lo1, const char_type* __hi1,
                            const char_type* __lo2, const char_type* __hi2) const;
     virtual string_type do_transform(const char_type* __lo, const char_type* __hi) const
@@ -559,8 +559,8 @@ public:
 
     static locale::id id;
 
-protected:
     ~ctype();
+protected:
     virtual bool do_is(mask __m, char_type __c) const;
     virtual const char_type* do_is(const char_type* __low, const char_type* __high, mask* __vec) const;
     virtual const char_type* do_scan_is(mask __m, const char_type* __low, const char_type* __high) const;
@@ -684,8 +684,8 @@ public:
     static const short* __classic_lower_table() _NOEXCEPT;
 #endif
 
-protected:
     ~ctype();
+protected:
     virtual char_type do_toupper(char_type __c) const;
     virtual const char_type* do_toupper(char_type* __low, const char_type* __high) const;
     virtual char_type do_tolower(char_type __c) const;
@@ -926,12 +926,12 @@ public:
 
     static locale::id id;
 
+    ~codecvt();
+
 protected:
     _LIBCPP_INLINE_VISIBILITY
     explicit codecvt(const char*, size_t __refs = 0)
         : locale::facet(__refs) {}
-
-    ~codecvt();
 
     virtual result do_out(state_type& __st,
                           const intern_type* __frm, const intern_type* __frm_end, const intern_type*& __frm_nxt,
@@ -1011,10 +1011,10 @@ public:
 
     static locale::id id;
 
+    ~codecvt();
+
 protected:
     explicit codecvt(const char*, size_t __refs = 0);
-
-    ~codecvt();
 
     virtual result do_out(state_type& __st,
                           const intern_type* __frm, const intern_type* __frm_end, const intern_type*& __frm_nxt,
@@ -1095,12 +1095,12 @@ public:
 
     static locale::id id;
 
+    ~codecvt();
+
 protected:
     _LIBCPP_INLINE_VISIBILITY
     explicit codecvt(const char*, size_t __refs = 0)
         : locale::facet(__refs) {}
-
-    ~codecvt();
 
     virtual result do_out(state_type& __st,
                           const intern_type* __frm, const intern_type* __frm_end, const intern_type*& __frm_nxt,
@@ -1181,12 +1181,12 @@ public:
 
     static locale::id id;
 
+    ~codecvt();
+
 protected:
     _LIBCPP_INLINE_VISIBILITY
     explicit codecvt(const char*, size_t __refs = 0)
         : locale::facet(__refs) {}
-
-    ~codecvt();
 
     virtual result do_out(state_type& __st,
                           const intern_type* __frm, const intern_type* __frm_end, const intern_type*& __frm_nxt,
@@ -1433,8 +1433,8 @@ public:
 
     static locale::id id;
 
-protected:
     ~numpunct();
+protected:
     virtual char_type do_decimal_point() const;
     virtual char_type do_thousands_sep() const;
     virtual string do_grouping() const;
@@ -1464,8 +1464,8 @@ public:
 
     static locale::id id;
 
-protected:
     ~numpunct();
+protected:
     virtual char_type do_decimal_point() const;
     virtual char_type do_thousands_sep() const;
     virtual string do_grouping() const;
