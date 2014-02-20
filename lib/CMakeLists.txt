@@ -3,7 +3,6 @@ file(GLOB LIBCXX_SOURCES ../src/*.cpp)
 # Duetto: Remove istream/ostream users as they depend on virtual bases
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/strstream.cpp")
 # Duetto: Remove pthread related stuff
-list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/mutex.cpp")
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/algorithm.cpp")
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/debug.cpp")
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/regex.cpp")
