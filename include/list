@@ -585,10 +585,10 @@ protected:
     {
 #if _LIBCPP_DEBUG_LEVEL >= 2
         return const_iterator(static_cast<__node_const_pointer>(
-        pointer_traits<__node_base_pointer>::pointer_to(const_cast<__node_base&>(__end_))), this);
+        pointer_traits<__node_base_pointer>::pointer_to(const_cast<__node&>(__end_))), this);
 #else
         return const_iterator(static_cast<__node_const_pointer>(
-        pointer_traits<__node_base_pointer>::pointer_to(const_cast<__node_base&>(__end_))));
+        pointer_traits<__node_base_pointer>::pointer_to(const_cast<__node&>(__end_))));
 #endif
     }
 
