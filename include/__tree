@@ -826,7 +826,7 @@ private:
                                                      __end_node_const_ptr;
 
     __node_pointer                                          __begin_node_;
-    __compressed_pair<__end_node_t, __node_allocator>  __pair1_;
+    __compressed_pair<typename std::remove_pointer<__node_pointer>::type, __node_allocator>  __pair1_;
     __compressed_pair<size_type, value_compare>        __pair3_;
 
 public:
