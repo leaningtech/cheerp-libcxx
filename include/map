@@ -576,7 +576,7 @@ template <class _Key, class _Tp, class _Compare, class _Allocator>
     class multimap;
 template <class _TreeIterator> class __map_const_iterator;
 
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L && !defined(__DUETTO__)
 
 template <class _Key, class _Tp>
 union __value_type
