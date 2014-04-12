@@ -815,7 +815,7 @@ private:
 
     // --- Member data begin ---
     __bucket_list                                     __bucket_list_;
-    __compressed_pair<__first_node, __node_allocator> __p1_;
+    __compressed_pair<__node, __node_allocator> __p1_;
     __compressed_pair<size_type, hasher>              __p2_;
     __compressed_pair<float, key_equal>               __p3_;
     // --- Member data end ---
