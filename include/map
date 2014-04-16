@@ -1197,6 +1197,9 @@ private:
         __find_equal_key(__node_base_pointer& __parent, const key_type& __k);
     __node_base_const_pointer
         __find_equal_key(__node_base_const_pointer& __parent, const key_type& __k) const;
+#ifdef __DUETTO__
+    static_assert(!std::is_pointer<_Key>::value, "Duetto: std::map with pointers as keys is not currently supported");
+#endif
 };
 
 // Find place to insert if __k doesn't exist
@@ -1922,6 +1925,9 @@ private:
         __node_holder __construct_node(_A0&& __a0, _A1&& __a1, _Args&& ...__args);
 #endif  // _LIBCPP_HAS_NO_VARIADICS
 #endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
+#ifdef __DUETTO__
+    static_assert(!std::is_pointer<_Key>::value, "Duetto: std::multimap with pointers as keys is not currently supported");
+#endif
 };
 
 #ifndef _LIBCPP_HAS_NO_RVALUE_REFERENCES
