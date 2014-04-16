@@ -1048,6 +1048,9 @@ private:
 #endif  // _LIBCPP_HAS_NO_VARIADICS
 #endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
     __node_holder __construct_node_with_key(const key_type& __k);
+#ifdef __DUETTO__
+    static_assert(!std::is_pointer<_Key>::value, "Duetto: std::unordered_map with pointers as keys is not currently supported");
+#endif
 };
 
 template <class _Key, class _Tp, class _Hash, class _Pred, class _Alloc>
