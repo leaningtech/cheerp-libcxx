@@ -15,7 +15,7 @@
 #include <string>
 #include <memory>
 #include <utility>
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 #include <mutex>
 #endif
 #include <cstdint>
@@ -125,7 +125,7 @@ private:
 
 class _LIBCPP_TYPE_VIS locale::id
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     bool           __flag_;
 #else
     once_flag      __flag_;
@@ -134,7 +134,7 @@ class _LIBCPP_TYPE_VIS locale::id
 
     static int32_t __next_id;
 public:
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR id() :__flag_(false), __id_(0) {}
 #else
     _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR id() :__id_(0) {}
@@ -277,7 +277,7 @@ template <>
 class _LIBCPP_TYPE_VIS collate_byname<char>
     : public collate<char>
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     locale_t __l;
 #endif
 public:
@@ -298,7 +298,7 @@ template <>
 class _LIBCPP_TYPE_VIS collate_byname<wchar_t>
     : public collate<wchar_t>
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     locale_t __l;
 #endif
 public:
@@ -389,7 +389,7 @@ public:
     static const mask punct  = _ISPUNCT;
     static const mask xdigit = _ISXDIGIT;
     static const mask blank  = _ISBLANK;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     typedef char mask;
     static const mask space  = _S;
     static const mask print  = (_P|_U|_L|_N|_B);
@@ -653,7 +653,7 @@ template <>
 class _LIBCPP_TYPE_VIS ctype_byname<char>
     : public ctype<char>
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     locale_t __l;
 #endif
 
@@ -673,7 +673,7 @@ template <>
 class _LIBCPP_TYPE_VIS ctype_byname<wchar_t>
     : public ctype<wchar_t>
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     locale_t __l;
 #endif
 
@@ -907,7 +907,7 @@ class _LIBCPP_TYPE_VIS codecvt<wchar_t, char, mbstate_t>
     : public locale::facet,
       public codecvt_base
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     locale_t __l;
 #endif
 public:

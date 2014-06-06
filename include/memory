@@ -3138,7 +3138,7 @@ __murmur2_or_cityhash<_Size, 32>::operator()(const void* __key, _Size __len)
     return __h;
 }
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template <class _Size>
 struct __murmur2_or_cityhash<_Size, 64>
 {

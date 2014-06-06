@@ -9,7 +9,7 @@
 
 #define _LIBCPP_BUILDING_MEMORY
 #include "memory"
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 #include "mutex"
 #include "thread"
 #endif
@@ -23,7 +23,7 @@ template <class T>
 inline T
 increment(T& t) _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return ++t;
 #else
     return __sync_add_and_fetch(&t, 1);
@@ -34,7 +34,7 @@ template <class T>
 inline T
 decrement(T& t) _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return --t;
 #else
     return __sync_add_and_fetch(&t, -1);
@@ -129,7 +129,7 @@ __shared_weak_count::__get_deleter(const type_info&) const _NOEXCEPT
 
 #endif  // _LIBCPP_NO_RTTI
 
-#if __has_feature(cxx_atomic) && !defined(__DUETTO__)
+#if __has_feature(cxx_atomic) && !defined(__CHEERP__)
 
 static const std::size_t __sp_mut_count = 16;
 static pthread_mutex_t mut_back_imp[__sp_mut_count] =

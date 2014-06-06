@@ -178,9 +178,9 @@ template<class Callable, class ...Args>
 #ifndef _LIBCPP_HAS_NO_VARIADICS
 #include <tuple>
 #endif
-#ifdef __DUETTO__
-#include <duetto/client.h>
-#include <duetto/clientlib.h>
+#ifdef __CHEERP__
+#include <cheerp/client.h>
+#include <cheerp/clientlib.h>
 #endif
 
 #include <__undef_min_max>
@@ -193,7 +193,7 @@ _LIBCPP_BEGIN_NAMESPACE_STD
 
 class _LIBCPP_TYPE_VIS recursive_mutex
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     int __m_;
 #else
     pthread_mutex_t __m_;
@@ -212,7 +212,7 @@ public:
     bool try_lock() _NOEXCEPT;
     void unlock()  _NOEXCEPT;
 
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     typedef int* native_handle_type;
 #else
     typedef pthread_mutex_t* native_handle_type;
@@ -224,7 +224,7 @@ public:
 class _LIBCPP_TYPE_VIS timed_mutex
 {
     mutex              __m_;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     condition_variable __cv_;
 #endif
     bool               __locked_;
@@ -255,12 +255,12 @@ timed_mutex::try_lock_until(const chrono::time_point<_Clock, _Duration>& __t)
     using namespace chrono;
     unique_lock<mutex> __lk(__m_);
     bool no_timeout = _Clock::now() < __t;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     while (no_timeout && __locked_)
         no_timeout = __cv_.wait_until(__lk, __t) == cv_status::no_timeout;
 #else
     if (no_timeout && __locked_)
-        client::console.log("Duetto: timed_mutex::try_lock_until can't block");
+        client::console.log("Cheerp: timed_mutex::try_lock_until can't block");
 #endif
     if (!__locked_)
     {
@@ -273,11 +273,11 @@ timed_mutex::try_lock_until(const chrono::time_point<_Clock, _Duration>& __t)
 class _LIBCPP_TYPE_VIS recursive_timed_mutex
 {
     mutex              __m_;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     condition_variable __cv_;
 #endif
     size_t             __count_;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     pthread_t          __id_;
 #endif
 public:
@@ -305,11 +305,11 @@ bool
 recursive_timed_mutex::try_lock_until(const chrono::time_point<_Clock, _Duration>& __t)
 {
     using namespace chrono;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     pthread_t __id = pthread_self();
 #endif
     unique_lock<mutex> lk(__m_);
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     if (pthread_equal(__id, __id_))
 #endif
     {
@@ -318,7 +318,7 @@ recursive_timed_mutex::try_lock_until(const chrono::time_point<_Clock, _Duration
         ++__count_;
         return true;
     }
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     bool no_timeout = _Clock::now() < __t;
     while (no_timeout && __count_ != 0)
         no_timeout = __cv_.wait_until(lk, __t) == cv_status::no_timeout;
@@ -385,7 +385,7 @@ lock(_L0& __l0, _L1& __l1)
                 break;
             }
         }
-#ifndef __DUETTO__
+#ifndef __CHEERP__
         sched_yield();
 #endif
         {
@@ -396,7 +396,7 @@ lock(_L0& __l0, _L1& __l1)
                 break;
             }
         }
-#ifndef __DUETTO__
+#ifndef __CHEERP__
         sched_yield();
 #endif
     }
@@ -423,7 +423,7 @@ __lock_first(int __i, _L0& __l0, _L1& __l1, _L2& __l2, _L3& ...__l3)
                 }
             }
             ++__i;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
             sched_yield();
 #endif
             break;
@@ -441,7 +441,7 @@ __lock_first(int __i, _L0& __l0, _L1& __l1, _L2& __l2, _L3& ...__l3)
                 __i = 0;
             else
                 __i += 2;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
             sched_yield();
 #endif
             break;

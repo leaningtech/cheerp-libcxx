@@ -66,7 +66,7 @@ inline
 T&
 make(A0 a0)
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static T buf [[noinit]];
 #else
     static typename aligned_storage<sizeof(T)>::type buf;
@@ -80,7 +80,7 @@ inline
 T&
 make(A0 a0, A1 a1)
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static T buf [[noinit]];
 #else
     static typename aligned_storage<sizeof(T)>::type buf;
@@ -94,7 +94,7 @@ inline
 T&
 make(A0 a0, A1 a1, A2 a2)
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static T buf [[noinit]];
 #else
     static typename aligned_storage<sizeof(T)>::type buf;
@@ -146,7 +146,7 @@ class _LIBCPP_HIDDEN locale::__imp
     : public facet
 {
     enum {N = 28};
-#if defined(_LIBCPP_MSVC) || defined(__DUETTO__)
+#if defined(_LIBCPP_MSVC) || defined(__CHEERP__)
 // FIXME: MSVC doesn't support aligned parameters by value.
 // I can't get the __sso_allocator to work here
 // for MSVC I think for this reason.
@@ -472,7 +472,7 @@ const locale&
 locale::__imp::make_classic()
 {
     // only one thread can get in here and it only gets in once
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static locale buf [[noinit]];
 #else
     static aligned_storage<sizeof(locale)>::type buf;
@@ -493,7 +493,7 @@ locale&
 locale::__imp::make_global()
 {
     // only one thread can get in here and it only gets in once
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static locale buf [[noinit]];
 #else
     static aligned_storage<sizeof(locale)>::type buf;
@@ -659,7 +659,7 @@ public:
 long
 locale::id::__get()
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     if(!__flag_)
     {
         __init();
@@ -674,7 +674,7 @@ locale::id::__get()
 void
 locale::id::__init()
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     __id_ = ++__next_id;
 #else
     __id_ = __sync_add_and_fetch(&__next_id, 1);
@@ -685,7 +685,7 @@ locale::id::__init()
 
 collate_byname<char>::collate_byname(const char* n, size_t refs)
     : collate<char>(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, n, 0))
 #endif
 {
@@ -698,7 +698,7 @@ collate_byname<char>::collate_byname(const char* n, size_t refs)
 
 collate_byname<char>::collate_byname(const string& name, size_t refs)
     : collate<char>(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 #endif
 {
@@ -711,7 +711,7 @@ collate_byname<char>::collate_byname(const string& name, size_t refs)
 
 collate_byname<char>::~collate_byname()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     freelocale(__l);
 #endif
 }
@@ -722,7 +722,7 @@ collate_byname<char>::do_compare(const char_type* __lo1, const char_type* __hi1,
 {
     string_type lhs(__lo1, __hi1);
     string_type rhs(__lo2, __hi2);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     int r = strcoll(lhs.c_str(), rhs.c_str());
 #else
     int r = strcoll_l(lhs.c_str(), rhs.c_str(), __l);
@@ -738,7 +738,7 @@ collate_byname<char>::string_type
 collate_byname<char>::do_transform(const char_type* lo, const char_type* hi) const
 {
     const string_type in(lo, hi);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     string_type out(strxfrm(0, in.c_str(), 0), char());
     strxfrm(const_cast<char*>(out.c_str()), in.c_str(), out.size()+1);
 #else
@@ -752,7 +752,7 @@ collate_byname<char>::do_transform(const char_type* lo, const char_type* hi) con
 
 collate_byname<wchar_t>::collate_byname(const char* n, size_t refs)
     : collate<wchar_t>(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, n, 0))
 #endif
 {
@@ -765,7 +765,7 @@ collate_byname<wchar_t>::collate_byname(const char* n, size_t refs)
 
 collate_byname<wchar_t>::collate_byname(const string& name, size_t refs)
     : collate<wchar_t>(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 #endif
 {
@@ -778,7 +778,7 @@ collate_byname<wchar_t>::collate_byname(const string& name, size_t refs)
 
 collate_byname<wchar_t>::~collate_byname()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     freelocale(__l);
 #endif
 }
@@ -789,7 +789,7 @@ collate_byname<wchar_t>::do_compare(const char_type* __lo1, const char_type* __h
 {
     string_type lhs(__lo1, __hi1);
     string_type rhs(__lo2, __hi2);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     int r = wcscoll(lhs.c_str(), rhs.c_str());
 #else
     int r = wcscoll_l(lhs.c_str(), rhs.c_str(), __l);
@@ -805,7 +805,7 @@ collate_byname<wchar_t>::string_type
 collate_byname<wchar_t>::do_transform(const char_type* lo, const char_type* hi) const
 {
     const string_type in(lo, hi);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     string_type out(wcsxfrm(0, in.c_str(), 0), wchar_t());
     wcsxfrm(const_cast<wchar_t*>(out.c_str()), in.c_str(), out.size()+1);
 #else
@@ -876,7 +876,7 @@ ctype<wchar_t>::do_toupper(char_type c) const
     return isascii(c) ? _DefaultRuneLocale.__mapupper[c] : c;
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__) || defined(__NetBSD__)
     return isascii(c) ? ctype<char>::__classic_upper_table()[c] : c;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     return (isascii(c) && iswlower(c)) ? c-L'a'+L'A' : c;
 #else
     return (isascii(c) && iswlower_l(c, __cloc())) ? c-L'a'+L'A' : c;
@@ -892,7 +892,7 @@ ctype<wchar_t>::do_toupper(char_type* low, const char_type* high) const
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__) || defined(__NetBSD__)
         *low = isascii(*low) ? ctype<char>::__classic_upper_table()[*low]
                              : *low;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         *low = (isascii(*low) && islower(*low)) ? (*low-L'a'+L'A') : *low;
 #else
         *low = (isascii(*low) && islower_l(*low, __cloc())) ? (*low-L'a'+L'A') : *low;
@@ -907,7 +907,7 @@ ctype<wchar_t>::do_tolower(char_type c) const
     return isascii(c) ? _DefaultRuneLocale.__maplower[c] : c;
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__) || defined(__NetBSD__)
     return isascii(c) ? ctype<char>::__classic_lower_table()[c] : c;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     return (isascii(c) && isupper(c)) ? c-L'A'+'a' : c;
 #else
     return (isascii(c) && isupper_l(c, __cloc())) ? c-L'A'+'a' : c;
@@ -923,7 +923,7 @@ ctype<wchar_t>::do_tolower(char_type* low, const char_type* high) const
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__) || defined(__NetBSD__)
         *low = isascii(*low) ? ctype<char>::__classic_lower_table()[*low]
                              : *low;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         *low = (isascii(*low) && isupper(*low)) ? *low-L'A'+L'a' : *low;
 #else
         *low = (isascii(*low) && isupper_l(*low, __cloc())) ? *low-L'A'+L'a' : *low;
@@ -994,7 +994,7 @@ ctype<char>::do_toupper(char_type c) const
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__)
     return isascii(c) ? 
       static_cast<char>(__classic_upper_table()[static_cast<unsigned char>(c)]) : c;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     return (isascii(c) && islower(c)) ? c-'a'+'A' : c;
 #else
     return (isascii(c) && islower_l(c, __cloc())) ? c-'a'+'A' : c;
@@ -1013,7 +1013,7 @@ ctype<char>::do_toupper(char_type* low, const char_type* high) const
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__)
         *low = isascii(*low) ?
           static_cast<char>(__classic_upper_table()[static_cast<size_t>(*low)]) : *low;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         *low = (isascii(*low) && islower(*low)) ? *low-'a'+'A' : *low;
 #else
         *low = (isascii(*low) && islower_l(*low, __cloc())) ? *low-'a'+'A' : *low;
@@ -1032,7 +1032,7 @@ ctype<char>::do_tolower(char_type c) const
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__) || defined(__NetBSD__)
     return isascii(c) ?
       static_cast<char>(__classic_lower_table()[static_cast<size_t>(c)]) : c;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     return (isascii(c) && isupper(c)) ? c-'A'+'a' : c;
 #else
     return (isascii(c) && isupper_l(c, __cloc())) ? c-'A'+'a' : c;
@@ -1049,7 +1049,7 @@ ctype<char>::do_tolower(char_type* low, const char_type* high) const
         *low = static_cast<char>(__classic_lower_table()[static_cast<unsigned char>(*low)]);
 #elif defined(__GLIBC__) || defined(__EMSCRIPTEN__)
         *low = isascii(*low) ? static_cast<char>(__classic_lower_table()[static_cast<size_t>(*low)]) : *low;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         *low = (isascii(*low) && isupper(*low)) ? *low-'A'+'a' : *low;
 #else
         *low = (isascii(*low) && isupper_l(*low, __cloc())) ? *low-'A'+'a' : *low;
@@ -1115,7 +1115,7 @@ ctype<char>::classic_table()  _NOEXCEPT
     return *__ctype_b_loc();
 #elif defined(_AIX)
     return (const unsigned int *)__lc_ctype_ptr->obj->mask;
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     return __ctype_ptr__;
 #else
     // Platform not supported: abort so the person doing the port knows what to
@@ -1170,7 +1170,7 @@ ctype<char>::__classic_upper_table() _NOEXCEPT
 
 ctype_byname<char>::ctype_byname(const char* name, size_t refs)
     : ctype<char>(0, false, refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, name, 0))
 #endif
 {
@@ -1183,7 +1183,7 @@ ctype_byname<char>::ctype_byname(const char* name, size_t refs)
 
 ctype_byname<char>::ctype_byname(const string& name, size_t refs)
     : ctype<char>(0, false, refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 #endif
 {
@@ -1196,7 +1196,7 @@ ctype_byname<char>::ctype_byname(const string& name, size_t refs)
 
 ctype_byname<char>::~ctype_byname()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     freelocale(__l);
 #endif
 }
@@ -1204,7 +1204,7 @@ ctype_byname<char>::~ctype_byname()
 char
 ctype_byname<char>::do_toupper(char_type c) const
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return static_cast<char>(toupper(static_cast<unsigned char>(c)));
 #else
     return static_cast<char>(toupper_l(static_cast<unsigned char>(c), __l));
@@ -1216,7 +1216,7 @@ ctype_byname<char>::do_toupper(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
     {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         *low = static_cast<char>(toupper(static_cast<unsigned char>(*low)));
 #else
         *low = static_cast<char>(toupper_l(static_cast<unsigned char>(*low), __l));
@@ -1228,7 +1228,7 @@ ctype_byname<char>::do_toupper(char_type* low, const char_type* high) const
 char
 ctype_byname<char>::do_tolower(char_type c) const
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return static_cast<char>(tolower(static_cast<unsigned char>(c)));
 #else
     return static_cast<char>(tolower_l(static_cast<unsigned char>(c), __l));
@@ -1240,7 +1240,7 @@ ctype_byname<char>::do_tolower(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
     {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         *low = static_cast<char>(tolower(static_cast<unsigned char>(*low)));
 #else
         *low = static_cast<char>(tolower_l(static_cast<unsigned char>(*low), __l));
@@ -1253,7 +1253,7 @@ ctype_byname<char>::do_tolower(char_type* low, const char_type* high) const
 
 ctype_byname<wchar_t>::ctype_byname(const char* name, size_t refs)
     : ctype<wchar_t>(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, name, 0))
 #endif
 {
@@ -1266,7 +1266,7 @@ ctype_byname<wchar_t>::ctype_byname(const char* name, size_t refs)
 
 ctype_byname<wchar_t>::ctype_byname(const string& name, size_t refs)
     : ctype<wchar_t>(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, name.c_str(), 0))
 #endif
 {
@@ -1279,7 +1279,7 @@ ctype_byname<wchar_t>::ctype_byname(const string& name, size_t refs)
 
 ctype_byname<wchar_t>::~ctype_byname()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     freelocale(__l);
 #endif
 }
@@ -1292,7 +1292,7 @@ ctype_byname<wchar_t>::do_is(mask m, char_type c) const
 #else
     bool result = false;
     wint_t ch = static_cast<wint_t>(c);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     if (m & space) result |= (iswspace(ch) != 0);
     if (m & print) result |= (iswprint(ch) != 0);
     if (m & cntrl) result |= (iswcntrl(ch) != 0);
@@ -1330,55 +1330,55 @@ ctype_byname<wchar_t>::do_is(const char_type* low, const char_type* high, mask* 
         {
             *vec = 0;
             wint_t ch = static_cast<wint_t>(*low);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswspace(ch))
 #else
             if (iswspace_l(ch, __l))
 #endif
                 *vec |= space;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswprint(ch))
 #else
             if (iswprint_l(ch, __l))
 #endif
                 *vec |= print;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswcntrl(ch))
 #else
             if (iswcntrl_l(ch, __l))
 #endif
                 *vec |= cntrl;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswupper(ch))
 #else
             if (iswupper_l(ch, __l))
 #endif
                 *vec |= upper;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswlower(ch))
 #else
             if (iswlower_l(ch, __l))
 #endif
                 *vec |= lower;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswalpha(ch))
 #else
             if (iswalpha_l(ch, __l))
 #endif
                 *vec |= alpha;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswdigit(ch))
 #else
             if (iswdigit_l(ch, __l))
 #endif
                 *vec |= digit;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswpunct(ch))
 #else
             if (iswpunct_l(ch, __l))
 #endif
                 *vec |= punct;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
             if (iswxdigit(ch))
 #else
             if (iswxdigit_l(ch, __l))
@@ -1399,7 +1399,7 @@ ctype_byname<wchar_t>::do_scan_is(mask m, const char_type* low, const char_type*
             break;
 #else
         wint_t ch = static_cast<wint_t>(*low);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         if (m & space && iswspace(ch)) break;
         if (m & print && iswprint(ch)) break;
         if (m & cntrl && iswcntrl(ch)) break;
@@ -1437,7 +1437,7 @@ ctype_byname<wchar_t>::do_scan_not(mask m, const char_type* low, const char_type
             break;
 #else
         wint_t ch = static_cast<wint_t>(*low);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         if (m & space && iswspace(ch)) continue;
         if (m & print && iswprint(ch)) continue;
         if (m & cntrl && iswcntrl(ch)) continue;
@@ -1469,7 +1469,7 @@ ctype_byname<wchar_t>::do_scan_not(mask m, const char_type* low, const char_type
 wchar_t
 ctype_byname<wchar_t>::do_toupper(char_type c) const
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return towupper(c);
 #else
     return towupper_l(c, __l);
@@ -1481,7 +1481,7 @@ ctype_byname<wchar_t>::do_toupper(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
     {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         *low = towupper(*low);
 #else
         *low = towupper_l(*low, __l);
@@ -1493,7 +1493,7 @@ ctype_byname<wchar_t>::do_toupper(char_type* low, const char_type* high) const
 wchar_t
 ctype_byname<wchar_t>::do_tolower(char_type c) const
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return towlower(c);
 #else
     return towlower_l(c, __l);
@@ -1505,7 +1505,7 @@ ctype_byname<wchar_t>::do_tolower(char_type* low, const char_type* high) const
 {
     for (; low != high; ++low)
     {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         *low = towlower(*low);
 #else
         *low = towlower_l(*low, __l);
@@ -1519,7 +1519,7 @@ ctype_byname<wchar_t>::do_widen(char c) const
 {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     return btowc_l(c, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     return btowc(c);
 #else
     return __btowc_l(c, __l);
@@ -1532,7 +1532,7 @@ ctype_byname<wchar_t>::do_widen(const char* low, const char* high, char_type* de
     for (; low != high; ++low, ++dest)
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         *dest = btowc_l(*low, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         *dest = btowc(*low);
 #else
         *dest = __btowc_l(*low, __l);
@@ -1545,7 +1545,7 @@ ctype_byname<wchar_t>::do_narrow(char_type c, char dfault) const
 {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     int r = wctob_l(c, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     int r = wctob(c);
 #else
     int r = __wctob_l(c, __l);
@@ -1560,7 +1560,7 @@ ctype_byname<wchar_t>::do_narrow(const char_type* low, const char_type* high, ch
     {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         int r = wctob_l(*low, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         int r = wctob(*low);
 #else
         int r = __wctob_l(*low, __l);
@@ -1637,7 +1637,7 @@ locale::id codecvt<wchar_t, char, mbstate_t>::id;
 
 codecvt<wchar_t, char, mbstate_t>::codecvt(size_t refs)
     : locale::facet(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(_LIBCPP_GET_C_LOCALE)
 #endif
 {
@@ -1645,7 +1645,7 @@ codecvt<wchar_t, char, mbstate_t>::codecvt(size_t refs)
 
 codecvt<wchar_t, char, mbstate_t>::codecvt(const char* nm, size_t refs)
     : locale::facet(refs)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__l(newlocale(LC_ALL_MASK, nm, 0))
 #endif
 {
@@ -1658,7 +1658,7 @@ codecvt<wchar_t, char, mbstate_t>::codecvt(const char* nm, size_t refs)
 
 codecvt<wchar_t, char, mbstate_t>::~codecvt()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     if (__l != _LIBCPP_GET_C_LOCALE)
         freelocale(__l);
 #endif
@@ -1683,7 +1683,7 @@ codecvt<wchar_t, char, mbstate_t>::do_out(state_type& st,
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         size_t n = wcsnrtombs_l(to, &frm_nxt, static_cast<size_t>(fend-frm),
                                 static_cast<size_t>(to_end-to), &st, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         size_t n = wcsnrtombs(to, &frm_nxt, fend-frm, to_end-to, &st);
 #else
         size_t n = __wcsnrtombs_l(to, &frm_nxt, fend-frm, to_end-to, &st, __l);
@@ -1695,7 +1695,7 @@ codecvt<wchar_t, char, mbstate_t>::do_out(state_type& st,
             {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
                 n = wcrtomb_l(to_nxt, *frm, &save_state, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
                 n = wcrtomb(to_nxt, *frm, &save_state);
 #else
                 n = __wcrtomb_l(to_nxt, *frm, &save_state, __l);
@@ -1718,7 +1718,7 @@ codecvt<wchar_t, char, mbstate_t>::do_out(state_type& st,
             extern_type tmp[MB_LEN_MAX];
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
             n = wcrtomb_l(tmp, intern_type(), &st, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
             n = wcrtomb(tmp, intern_type(), &st);
 #else
             n = __wcrtomb_l(tmp, intern_type(), &st, __l);
@@ -1758,7 +1758,7 @@ codecvt<wchar_t, char, mbstate_t>::do_in(state_type& st,
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         size_t n = mbsnrtowcs_l(to, &frm_nxt, static_cast<size_t>(fend-frm),
                                 static_cast<size_t>(to_end-to), &st, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         size_t n = mbsnrtowcs(to, &frm_nxt, fend-frm, to_end-to, &st);
 #else
         size_t n = __mbsnrtowcs_l(to, &frm_nxt, fend-frm, to_end-to, &st, __l);
@@ -1771,7 +1771,7 @@ codecvt<wchar_t, char, mbstate_t>::do_in(state_type& st,
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
                 n = mbrtowc_l(to_nxt, frm, static_cast<size_t>(fend-frm),
                               &save_state, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
                 n = mbrtowc(to_nxt, frm, fend-frm, &save_state);
 #else
                 n = __mbrtowc_l(to_nxt, frm, fend-frm, &save_state, __l);
@@ -1805,7 +1805,7 @@ codecvt<wchar_t, char, mbstate_t>::do_in(state_type& st,
             // Try to write the terminating null
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
             n = mbrtowc_l(to_nxt, frm_nxt, 1, &st, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
             n = mbrtowc(to_nxt, frm_nxt, 1, &st);
 #else
             n = __mbrtowc_l(to_nxt, frm_nxt, 1, &st, __l);
@@ -1831,7 +1831,7 @@ codecvt<wchar_t, char, mbstate_t>::do_unshift(state_type& st,
     extern_type tmp[MB_LEN_MAX];
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     size_t n = wcrtomb_l(tmp, intern_type(), &st, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     size_t n = wcrtomb(tmp, intern_type(), &st);
 #else
     size_t n = __wcrtomb_l(tmp, intern_type(), &st, __l);
@@ -1851,7 +1851,7 @@ codecvt<wchar_t, char, mbstate_t>::do_encoding() const  _NOEXCEPT
 {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     if (mbtowc_l(nullptr, nullptr, MB_LEN_MAX, __l) == 0)
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     if (mbtowc((wchar_t*) 0, (const char*) 0, MB_LEN_MAX) == 0)
 #else
     if (__mbtowc_l(nullptr, nullptr, MB_LEN_MAX, __l) == 0)
@@ -1860,7 +1860,7 @@ codecvt<wchar_t, char, mbstate_t>::do_encoding() const  _NOEXCEPT
         // stateless encoding
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         if (__l == 0 || MB_CUR_MAX_L(__l) == 1)  // there are no known constant length encodings
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
 	if (true)
 #else
         if (__l == 0 || __mb_cur_max_l(__l) == 1)  // there are no known constant length encodings
@@ -1886,7 +1886,7 @@ codecvt<wchar_t, char, mbstate_t>::do_length(state_type& st,
     {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         size_t n = mbrlen_l(frm, static_cast<size_t>(frm_end-frm), &st, __l);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         size_t n = mbrlen(frm, frm_end-frm, &st);
 #else
         size_t n = __mbrlen_l(frm, frm_end-frm, &st, __l);
@@ -1914,7 +1914,7 @@ codecvt<wchar_t, char, mbstate_t>::do_max_length() const  _NOEXCEPT
 {
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     return __l == 0 ? 1 : static_cast<int>(  MB_CUR_MAX_L(__l));
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     return 1;
 #else
     return __l == 0 ? 1 : static_cast<int>(__mb_cur_max_l(__l));
@@ -4478,7 +4478,7 @@ numpunct_byname<char>::__init(const char* nm)
 #endif  // _LIBCPP_NO_EXCEPTIONS
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         lconv* lc = localeconv_l(loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         lconv* lc = localeconv();
 #else
         lconv* lc = __localeconv_l(loc.get());
@@ -4523,7 +4523,7 @@ numpunct_byname<wchar_t>::__init(const char* nm)
 #endif  // _LIBCPP_NO_EXCEPTIONS
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         lconv* lc = localeconv_l(loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         lconv* lc = localeconv();
 #else
         lconv* lc = __localeconv_l(loc.get());
@@ -4975,7 +4975,7 @@ __time_get_storage<char>::__analyze(char fmt, const ctype<char>& ct)
     char f[3] = {0};
     f[0] = '%';
     f[1] = fmt;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     size_t n = strftime(buf, countof(buf), f, &t);
 #else
     size_t n = strftime_l(buf, countof(buf), f, &t, __loc_);
@@ -5127,7 +5127,7 @@ __time_get_storage<wchar_t>::__analyze(char fmt, const ctype<wchar_t>& ct)
     char f[3] = {0};
     f[0] = '%';
     f[1] = fmt;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     strftime(buf, countof(buf), f, &t);
 #else
     strftime_l(buf, countof(buf), f, &t, __loc_);
@@ -5138,7 +5138,7 @@ __time_get_storage<wchar_t>::__analyze(char fmt, const ctype<wchar_t>& ct)
     const char* bb = buf;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     size_t j = mbsrtowcs_l( wbb, &bb, countof(wbuf), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     size_t j = mbsrtowcs( wbb, &bb, countof(wbuf), &mb);
 #else
     size_t j = __mbsrtowcs_l( wbb, &bb, countof(wbuf), &mb, __loc_);
@@ -5279,13 +5279,13 @@ __time_get_storage<char>::init(const ctype<char>& ct)
     for (int i = 0; i < 7; ++i)
     {
         t.tm_wday = i;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%A", &t);
 #else
         strftime_l(buf, countof(buf), "%A", &t, __loc_);
 #endif
         __weeks_[i] = buf;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%a", &t);
 #else
         strftime_l(buf, countof(buf), "%a", &t, __loc_);
@@ -5296,13 +5296,13 @@ __time_get_storage<char>::init(const ctype<char>& ct)
     for (int i = 0; i < 12; ++i)
     {
         t.tm_mon = i;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%B", &t);
 #else
         strftime_l(buf, countof(buf), "%B", &t, __loc_);
 #endif
         __months_[i] = buf;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%b", &t);
 #else
         strftime_l(buf, countof(buf), "%b", &t, __loc_);
@@ -5311,14 +5311,14 @@ __time_get_storage<char>::init(const ctype<char>& ct)
     }
     // __am_pm_
     t.tm_hour = 1;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     strftime(buf, countof(buf), "%p", &t);
 #else
     strftime_l(buf, countof(buf), "%p", &t, __loc_);
 #endif
     __am_pm_[0] = buf;
     t.tm_hour = 13;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     strftime(buf, countof(buf), "%p", &t);
 #else
     strftime_l(buf, countof(buf), "%p", &t, __loc_);
@@ -5343,7 +5343,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
     for (int i = 0; i < 7; ++i)
     {
         t.tm_wday = i;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%A", &t);
 #else
         strftime_l(buf, countof(buf), "%A", &t, __loc_);
@@ -5352,7 +5352,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
         const char* bb = buf;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         size_t j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         size_t j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         size_t j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
@@ -5361,7 +5361,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
             __throw_runtime_error("locale not supported");
         wbe = wbuf + j;
         __weeks_[i].assign(wbuf, wbe);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%a", &t);
 #else
         strftime_l(buf, countof(buf), "%a", &t, __loc_);
@@ -5370,7 +5370,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
         bb = buf;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
@@ -5384,7 +5384,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
     for (int i = 0; i < 12; ++i)
     {
         t.tm_mon = i;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%B", &t);
 #else
         strftime_l(buf, countof(buf), "%B", &t, __loc_);
@@ -5393,7 +5393,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
         const char* bb = buf;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         size_t j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         size_t j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         size_t j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
@@ -5402,7 +5402,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
             __throw_runtime_error("locale not supported");
         wbe = wbuf + j;
         __months_[i].assign(wbuf, wbe);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
         strftime(buf, countof(buf), "%b", &t);
 #else
         strftime_l(buf, countof(buf), "%b", &t, __loc_);
@@ -5411,7 +5411,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
         bb = buf;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
@@ -5423,7 +5423,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
     }
     // __am_pm_
     t.tm_hour = 1;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     strftime(buf, countof(buf), "%p", &t);
 #else
     strftime_l(buf, countof(buf), "%p", &t, __loc_);
@@ -5432,7 +5432,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
     const char* bb = buf;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     size_t j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     size_t j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
     size_t j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
@@ -5442,7 +5442,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
     wbe = wbuf + j;
     __am_pm_[0].assign(wbuf, wbe);
     t.tm_hour = 13;
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     strftime(buf, countof(buf), "%p", &t);
 #else
     strftime_l(buf, countof(buf), "%p", &t, __loc_);
@@ -5451,7 +5451,7 @@ __time_get_storage<wchar_t>::init(const ctype<wchar_t>& ct)
     bb = buf;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
     j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, __loc_);
@@ -5717,7 +5717,7 @@ __time_put::__do_put(char* __nb, char*& __ne, const tm* __tm,
     char fmt[] = {'%', __fmt, __mod, 0};
     if (__mod != 0)
         swap(fmt[1], fmt[2]);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     size_t n = strftime(__nb, countof(__nb, __ne), fmt, __tm);
 #else
     size_t n = strftime_l(__nb, countof(__nb, __ne), fmt, __tm, __loc_);
@@ -5736,7 +5736,7 @@ __time_put::__do_put(wchar_t* __wb, wchar_t*& __we, const tm* __tm,
     const char* __nb = __nar;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     size_t j = mbsrtowcs_l(__wb, &__nb, countof(__wb, __we), &mb, __loc_);
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     size_t j = mbsrtowcs(__wb, &__nb, countof(__wb, __we), &mb);
 #else
     size_t j = __mbsrtowcs_l(__wb, &__nb, countof(__wb, __we), &mb, __loc_);
@@ -6133,7 +6133,7 @@ moneypunct_byname<char, false>::init(const char* nm)
 #endif  // _LIBCPP_NO_EXCEPTIONS
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     lconv* lc = localeconv_l(loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     lconv* lc = localeconv();
 #else
     lconv* lc = __localeconv_l(loc.get());
@@ -6183,7 +6183,7 @@ moneypunct_byname<char, true>::init(const char* nm)
 #endif  // _LIBCPP_NO_EXCEPTIONS
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     lconv* lc = localeconv_l(loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     lconv* lc = localeconv();
 #else
     lconv* lc = __localeconv_l(loc.get());
@@ -6250,7 +6250,7 @@ moneypunct_byname<wchar_t, false>::init(const char* nm)
 #endif  // _LIBCPP_NO_EXCEPTIONS
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     lconv* lc = localeconv_l(loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     lconv* lc = localeconv();
 #else
     lconv* lc = __localeconv_l(loc.get());
@@ -6269,7 +6269,7 @@ moneypunct_byname<wchar_t, false>::init(const char* nm)
     const char* bb = lc->currency_symbol;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     size_t j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     size_t j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
     size_t j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
@@ -6290,7 +6290,7 @@ moneypunct_byname<wchar_t, false>::init(const char* nm)
         bb = lc->positive_sign;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
@@ -6308,7 +6308,7 @@ moneypunct_byname<wchar_t, false>::init(const char* nm)
         bb = lc->negative_sign;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
@@ -6341,7 +6341,7 @@ moneypunct_byname<wchar_t, true>::init(const char* nm)
 #endif  // _LIBCPP_NO_EXCEPTIONS
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     lconv* lc = localeconv_l(loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     lconv* lc = localeconv();
 #else
     lconv* lc = __localeconv_l(loc.get());
@@ -6360,7 +6360,7 @@ moneypunct_byname<wchar_t, true>::init(const char* nm)
     const char* bb = lc->int_curr_symbol;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
     size_t j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
     size_t j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
     size_t j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
@@ -6385,7 +6385,7 @@ moneypunct_byname<wchar_t, true>::init(const char* nm)
         bb = lc->positive_sign;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
@@ -6407,7 +6407,7 @@ moneypunct_byname<wchar_t, true>::init(const char* nm)
         bb = lc->negative_sign;
 #ifdef _LIBCPP_LOCALE__L_EXTENSIONS
         j = mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
-#elif defined(__DUETTO__)
+#elif defined(__CHEERP__)
         j = mbsrtowcs(wbuf, &bb, countof(wbuf), &mb);
 #else
         j = __mbsrtowcs_l(wbuf, &bb, countof(wbuf), &mb, loc.get());
