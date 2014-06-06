@@ -26,7 +26,7 @@ _LIBCPP_BEGIN_NAMESPACE_STD
 
 class _LIBCPP_TYPE_VIS mutex
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     int __m_;
 #else
     pthread_mutex_t __m_;
@@ -35,7 +35,7 @@ class _LIBCPP_TYPE_VIS mutex
 public:
     _LIBCPP_INLINE_VISIBILITY
 #ifndef _LIBCPP_HAS_NO_CONSTEXPR
-#ifdef __DUETTO__
+#ifdef __CHEERP__
      constexpr mutex() _NOEXCEPT : __m_(0) {}
 #else
      constexpr mutex() _NOEXCEPT : __m_(PTHREAD_MUTEX_INITIALIZER) {}
@@ -54,7 +54,7 @@ public:
     bool try_lock() _NOEXCEPT;
     void unlock() _NOEXCEPT;
 
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     typedef int* native_handle_type;
 #else
     typedef pthread_mutex_t* native_handle_type;
@@ -276,7 +276,7 @@ _LIBCPP_DECLARE_STRONG_ENUM(cv_status)
 };
 _LIBCPP_DECLARE_STRONG_ENUM_EPILOG(cv_status)
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 class _LIBCPP_TYPE_VIS condition_variable
 {
     pthread_cond_t __cv_;

@@ -64,7 +64,7 @@ inline
 T&
 make(A0 a0)
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static T buf [[noinit]];
 #else
     static typename aligned_storage<sizeof(T)>::type buf;
@@ -78,7 +78,7 @@ inline
 T&
 make(A0 a0, A1 a1)
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static T buf [[noinit]];
 #else
     static typename aligned_storage<sizeof(T)>::type buf;
@@ -92,7 +92,7 @@ inline
 T&
 make(A0 a0, A1 a1, A2 a2)
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static T buf [[noinit]];
 #else
     static typename aligned_storage<sizeof(T)>::type buf;
@@ -144,7 +144,7 @@ class _LIBCPP_HIDDEN locale::__imp
     : public facet
 {
     enum {N = 28};
-#if defined(_LIBCPP_MSVC) || defined(__DUETTO__)
+#if defined(_LIBCPP_MSVC) || defined(__CHEERP__)
 // FIXME: MSVC doesn't support aligned parameters by value.
 // I can't get the __sso_allocator to work here
 // for MSVC I think for this reason.
@@ -470,7 +470,7 @@ const locale&
 locale::__imp::make_classic()
 {
     // only one thread can get in here and it only gets in once
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static locale buf [[noinit]];
 #else
     static aligned_storage<sizeof(locale)>::type buf;
@@ -491,7 +491,7 @@ locale&
 locale::__imp::make_global()
 {
     // only one thread can get in here and it only gets in once
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     static locale buf [[noinit]];
 #else
     static aligned_storage<sizeof(locale)>::type buf;
@@ -657,7 +657,7 @@ public:
 long
 locale::id::__get()
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     if(!__flag_)
     {
         __init();
@@ -672,7 +672,7 @@ locale::id::__get()
 void
 locale::id::__init()
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     __id_ = ++__next_id;
 #else
     __id_ = __sync_add_and_fetch(&__next_id, 1);

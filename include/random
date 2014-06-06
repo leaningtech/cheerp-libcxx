@@ -1690,7 +1690,7 @@ template <unsigned long long __a, unsigned long long __c,
           bool _MightOverflow = (__a != 0 && __m != 0 && __m-1 > (_Mp-__c)/__a)>
 struct __lce_ta;
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 // 64
 
 template <unsigned long long __a, unsigned long long __c, unsigned long long __m>
@@ -1901,7 +1901,7 @@ public:
         seed(_Sseq& __q)
             {__seed(__q, integral_constant<unsigned,
                 1 + (__m == 0 ? (sizeof(result_type) * __CHAR_BIT__ - 1)/32
-#ifdef __DUETTO__
+#ifdef __CHEERP__
                              :  (false))>());}
 #else
                              :  (__m > 0x100000000ull))>());}
@@ -1984,7 +1984,7 @@ linear_congruential_engine<_UIntType, __a, __c, __m>::__seed(_Sseq& __q,
     __x_ = __c == 0 && __s == 0 ? result_type(1) : __s;
 }
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template <class _UIntType, _UIntType __a, _UIntType __c, _UIntType __m>
 template<class _Sseq>
 void
@@ -2365,7 +2365,7 @@ mersenne_twister_engine<_UIntType, __w, __n, __m, __r, __a, __u, __d, __s, __b,
     }
 }
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template <class _UIntType, size_t __w, size_t __n, size_t __m, size_t __r,
           _UIntType __a, size_t __u, _UIntType __d, size_t __s,
           _UIntType __b, size_t __t, _UIntType __c, size_t __l, _UIntType __f>
@@ -2519,7 +2519,7 @@ typedef mersenne_twister_engine<uint_fast32_t, 32, 624, 397, 31,
                                 7,  0x9d2c5680,
                                 15, 0xefc60000,
                                 18, 1812433253>                         mt19937;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 typedef mersenne_twister_engine<uint_fast64_t, 64, 312, 156, 31,
                                 0xb5026f5aa96619e9ULL, 29, 0x5555555555555555ULL,
                                 17, 0x71d67fffeda60000ULL,
@@ -2681,7 +2681,7 @@ subtract_with_carry_engine<_UIntType, __w, __s, __r>::seed(result_type __sd,
     __i_ = 0;
 }
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template<class _UIntType, size_t __w, size_t __s, size_t __r>
 void
 subtract_with_carry_engine<_UIntType, __w, __s, __r>::seed(result_type __sd,
@@ -2715,7 +2715,7 @@ subtract_with_carry_engine<_UIntType, __w, __s, __r>::__seed(_Sseq& __q,
     __i_ = 0;
 }
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template<class _UIntType, size_t __w, size_t __s, size_t __r>
 template<class _Sseq>
 void
@@ -2840,7 +2840,7 @@ operator>>(basic_istream<_CharT, _Traits>& __is,
 }
 
 typedef subtract_with_carry_engine<uint_fast32_t, 24, 10, 24>     ranlux24_base;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 typedef subtract_with_carry_engine<uint_fast64_t, 48,  5, 12>     ranlux48_base;
 #endif
 
@@ -3015,7 +3015,7 @@ operator>>(basic_istream<_CharT, _Traits>& __is,
 }
 
 typedef discard_block_engine<ranlux24_base, 223, 23> ranlux24;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 typedef discard_block_engine<ranlux48_base, 389, 11> ranlux48;
 #endif
 
@@ -3260,7 +3260,7 @@ operator>>(basic_istream<_CharT, _Traits>& __is,
 
 // shuffle_order_engine
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template <uint64_t _Xp, uint64_t _Yp>
 struct __ugcd
 {
@@ -3399,7 +3399,7 @@ private:
 
     _LIBCPP_INLINE_VISIBILITY
     result_type __eval(false_type) {return __eval2(integral_constant<bool, __k & 1>());}
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     _LIBCPP_INLINE_VISIBILITY
     result_type __eval(true_type) {return __eval(__uratio<__k, _Rp>());}
 
@@ -3409,7 +3409,7 @@ private:
     result_type __eval2(true_type) {return __evalf<__k, 0>();}
 #endif
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     template <uint64_t _Np, uint64_t _Dp>
         _LIBCPP_INLINE_VISIBILITY
         typename enable_if
@@ -3674,7 +3674,7 @@ seed_seq::generate(_RandomAccessIterator __first, _RandomAccessIterator __last)
 
 // generate_canonical
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template<class _RealType, size_t __bits, class _URNG>
 _RealType
 generate_canonical(_URNG& __g)
@@ -3810,7 +3810,7 @@ public:
         {return !(__x == __y);}
 };
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template<class _RealType>
 template<class _URNG>
 inline _LIBCPP_INLINE_VISIBILITY
@@ -4203,7 +4203,7 @@ public:
         {return !(__x == __y);}
 };
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 template <class _RealType>
 template<class _URNG>
 _RealType

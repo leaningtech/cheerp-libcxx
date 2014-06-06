@@ -22,7 +22,7 @@ const adopt_lock_t  adopt_lock = {};
 
 mutex::~mutex()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     pthread_mutex_destroy(&__m_);
 #endif
 }
@@ -30,9 +30,9 @@ mutex::~mutex()
 void
 mutex::lock()
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     if(__m_)
-      client::console.log("Duetto: mutex::lock can't block");
+      client::console.log("Cheerp: mutex::lock can't block");
     else
       __m_++;
 #else
@@ -45,7 +45,7 @@ mutex::lock()
 bool
 mutex::try_lock() _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     if(__m_)
       return false;
     else
@@ -61,7 +61,7 @@ mutex::try_lock() _NOEXCEPT
 void
 mutex::unlock() _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     __m_--;
 #else
     int ec = pthread_mutex_unlock(&__m_);
@@ -74,7 +74,7 @@ mutex::unlock() _NOEXCEPT
 
 recursive_mutex::recursive_mutex()
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     __m_ = 0;
 #else
     pthread_mutexattr_t attr;
@@ -107,7 +107,7 @@ fail:
 
 recursive_mutex::~recursive_mutex()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     int e = pthread_mutex_destroy(&__m_);
     (void)e;
     assert(e == 0);
@@ -117,7 +117,7 @@ recursive_mutex::~recursive_mutex()
 void
 recursive_mutex::lock()
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     __m_++;
 #else
     int ec = pthread_mutex_lock(&__m_);
@@ -129,7 +129,7 @@ recursive_mutex::lock()
 void
 recursive_mutex::unlock() _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     __m_--;
 #else
     int e = pthread_mutex_unlock(&__m_);
@@ -141,7 +141,7 @@ recursive_mutex::unlock() _NOEXCEPT
 bool
 recursive_mutex::try_lock() _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     __m_++;
     return true;
 #else
@@ -165,9 +165,9 @@ void
 timed_mutex::lock()
 {
     unique_lock<mutex> lk(__m_);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     if (__locked_)
-        client::console.log("Duetto: timed_mutex::lock can't block");
+        client::console.log("Cheerp: timed_mutex::lock can't block");
 #else
     while (__locked_)
         __cv_.wait(lk);
@@ -192,7 +192,7 @@ timed_mutex::unlock() _NOEXCEPT
 {
     lock_guard<mutex> _(__m_);
     __locked_ = false;
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     __cv_.notify_one();
 #endif
 }
@@ -201,7 +201,7 @@ timed_mutex::unlock() _NOEXCEPT
 
 recursive_timed_mutex::recursive_timed_mutex()
     : __count_(0)
-#ifndef __DUETTO__
+#ifndef __CHEERP__
       ,__id_(0)
 #endif
 {
@@ -215,11 +215,11 @@ recursive_timed_mutex::~recursive_timed_mutex()
 void
 recursive_timed_mutex::lock()
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     pthread_t id = pthread_self();
 #endif
     unique_lock<mutex> lk(__m_);
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     if (pthread_equal(id, __id_))
 #endif
     {
@@ -228,7 +228,7 @@ recursive_timed_mutex::lock()
         ++__count_;
         return;
     }
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     while (__count_ != 0)
         __cv_.wait(lk);
     __count_ = 1;
@@ -239,11 +239,11 @@ recursive_timed_mutex::lock()
 bool
 recursive_timed_mutex::try_lock() _NOEXCEPT
 {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
     pthread_t id = pthread_self();
 #endif
     unique_lock<mutex> lk(__m_, try_to_lock);
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return true;
 #else
     if (lk.owns_lock() && (__count_ == 0 || pthread_equal(id, __id_)))
@@ -264,11 +264,11 @@ recursive_timed_mutex::unlock() _NOEXCEPT
     unique_lock<mutex> lk(__m_);
     if (--__count_ == 0)
     {
-#ifndef __DUETTO__
+#ifndef __CHEERP__
         __id_ = 0;
 #endif
         lk.unlock();
-#ifndef __DUETTO__
+#ifndef __CHEERP__
         __cv_.notify_one();
 #endif
     }

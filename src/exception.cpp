@@ -220,7 +220,7 @@ exception_ptr::exception_ptr(const exception_ptr& other) _NOEXCEPT
 #endif
 }
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 exception_ptr& exception_ptr::operator=(const exception_ptr& other) _NOEXCEPT
 {
 #if HAVE_DEPENDENT_EH_ABI
@@ -260,7 +260,7 @@ nested_exception::~nested_exception() _NOEXCEPT
 
 #endif
 
-#ifndef __DUETTO__
+#ifndef __CHEERP__
 _LIBCPP_NORETURN
 void
 nested_exception::rethrow_nested() const

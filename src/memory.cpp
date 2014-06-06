@@ -23,7 +23,7 @@ template <class T>
 inline T
 increment(T& t) _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return ++t;
 #else
     return __sync_add_and_fetch(&t, 1);
@@ -34,7 +34,7 @@ template <class T>
 inline T
 decrement(T& t) _NOEXCEPT
 {
-#ifdef __DUETTO__
+#ifdef __CHEERP__
     return --t;
 #else
     return __sync_add_and_fetch(&t, -1);

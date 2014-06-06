@@ -576,7 +576,7 @@ template <class _Key, class _Tp, class _Compare, class _Allocator>
     class multimap;
 template <class _TreeIterator> class __map_const_iterator;
 
-#if __cplusplus >= 201103L && !defined(__DUETTO__)
+#if __cplusplus >= 201103L && !defined(__CHEERP__)
 
 template <class _Key, class _Tp>
 union __value_type
@@ -1197,8 +1197,8 @@ private:
         __find_equal_key(__node_base_pointer& __parent, const key_type& __k);
     __node_base_const_pointer
         __find_equal_key(__node_base_const_pointer& __parent, const key_type& __k) const;
-#ifdef __DUETTO__
-    static_assert(!std::is_pointer<_Key>::value, "Duetto: std::map with pointers as keys is not currently supported");
+#ifdef __CHEERP__
+    static_assert(!std::is_pointer<_Key>::value, "Cheerp: std::map with pointers as keys is not currently supported");
 #endif
 };
 
@@ -1925,8 +1925,8 @@ private:
         __node_holder __construct_node(_A0&& __a0, _A1&& __a1, _Args&& ...__args);
 #endif  // _LIBCPP_HAS_NO_VARIADICS
 #endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
-#ifdef __DUETTO__
-    static_assert(!std::is_pointer<_Key>::value, "Duetto: std::multimap with pointers as keys is not currently supported");
+#ifdef __CHEERP__
+    static_assert(!std::is_pointer<_Key>::value, "Cheerp: std::multimap with pointers as keys is not currently supported");
 #endif
 };
 

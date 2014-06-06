@@ -140,10 +140,10 @@ using ::getwc;
 using ::putwc;
 using ::ungetwc;
 using ::wcstod;
-#if !defined(_LIBCPP_MSVCRT) && !defined(__DUETTO__)
+#if !defined(_LIBCPP_MSVCRT) && !defined(__CHEERP__)
 using ::wcstof;
 using ::wcstold;
-#endif // !defined(_LIBCPP_MSVCRT) && !defined(__DUETTO__)
+#endif // !defined(_LIBCPP_MSVCRT) && !defined(__CHEERP__)
 using ::wcstol;
 #ifndef _LIBCPP_HAS_NO_LONG_LONG
 using ::wcstoll;
