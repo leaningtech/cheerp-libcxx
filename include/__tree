@@ -843,7 +843,8 @@ public:
     {
         return static_cast<__node_const_pointer>
                (
-                   pointer_traits<__end_node_const_ptr>::pointer_to(const_cast<__end_node_t&>(__pair1_.first()))
+                   pointer_traits<__end_node_const_ptr>::pointer_to(
+			const_cast<typename std::remove_pointer<__node_pointer>::type&>(__pair1_.first()))
                );
     }
     _LIBCPP_INLINE_VISIBILITY
