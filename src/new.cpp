@@ -37,6 +37,7 @@
 
 #ifndef __GLIBCXX__
 
+#ifndef __CHEERP__
 // Implement all new and delete operators as weak definitions
 // in this shared library, so that they can be overriden by programs
 // that define non-weak copies of the functions.
@@ -158,6 +159,8 @@ operator delete[] (void* ptr, size_t) _NOEXCEPT
 {
     ::operator delete[](ptr);
 }
+
+#endif // !__CHEERP__
 
 #endif // !__GLIBCXX__
 
