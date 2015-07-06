@@ -549,7 +549,7 @@ void atomic_signal_fence(memory_order m) noexcept;
 #pragma GCC system_header
 #endif
 
-#ifdef _LIBCPP_HAS_NO_THREADS
+#if defined(_LIBCPP_HAS_NO_THREADS) && !defined(__CHEERP__)
 #error <atomic> is not supported on this single threaded system
 #endif
 #if !defined(_LIBCPP_HAS_C_ATOMIC_IMP) && !defined(_LIBCPP_HAS_GCC_ATOMIC_IMP)
