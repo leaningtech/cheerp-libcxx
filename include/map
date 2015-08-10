@@ -1198,7 +1198,7 @@ private:
     __node_base_const_pointer
         __find_equal_key(__node_base_const_pointer& __parent, const key_type& __k) const;
 #ifdef __CHEERP__
-    static_assert(!std::is_pointer<_Key>::value, "Cheerp: std::map with pointers as keys is not currently supported");
+    static_assert(!std::is_pointer<_Key>::value, "Cheerp: std::map with pointers as keys is not currently supported, use std::unordered_map");
 #endif
 };
 
