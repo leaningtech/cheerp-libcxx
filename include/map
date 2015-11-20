@@ -626,6 +626,7 @@ struct __value_type
     typedef _Key                                     key_type;
     typedef _Tp                                      mapped_type;
     typedef pair<const key_type, mapped_type>        value_type;
+    typedef pair<key_type, mapped_type>              __nc_value_type;
 
     value_type __cc;
 
@@ -641,6 +642,10 @@ struct __value_type
     _LIBCPP_INLINE_VISIBILITY
     __value_type(const _A0& __a0, const _A1& __a1)
         : __cc(__a0, __a1) {}
+
+    _LIBCPP_INLINE_VISIBILITY
+    __value_type& operator=(const __value_type& __v)
+        {reinterpret_cast<__nc_value_type&>(__cc) = __v.__cc; return *this;}
 };
 
 #endif
