@@ -525,10 +525,14 @@ public:
     }
 };
 
-#if __cplusplus >= 201103L && !defined(__CHEERP__)
+#if __cplusplus >= 201103L
 
 template <class _Key, class _Tp>
+#ifdef __CHEERP__
+struct __hash_value_type
+#else
 union __hash_value_type
+#endif
 {
     typedef _Key                                     key_type;
     typedef _Tp                                      mapped_type;
@@ -536,7 +540,9 @@ union __hash_value_type
     typedef pair<key_type, mapped_type>              __nc_value_type;
 
     value_type __cc;
+#ifndef __CHEERP__
     __nc_value_type __nc;
+#endif
 
     template <class ..._Args>
     _LIBCPP_INLINE_VISIBILITY
@@ -549,15 +555,27 @@ union __hash_value_type
 
     _LIBCPP_INLINE_VISIBILITY
     __hash_value_type(__hash_value_type&& __v)
+#ifdef __CHEERP__
+        : __cc(_VSTD::move(__v.__cc)) {}
+#else
         : __nc(_VSTD::move(__v.__nc)) {}
+#endif
 
     _LIBCPP_INLINE_VISIBILITY
     __hash_value_type& operator=(const __hash_value_type& __v)
+#ifdef __CHEERP__
+        {reinterpret_cast<__nc_value_type&>(__cc) = __v.__cc; return *this;}
+#else
         {__nc = __v.__cc; return *this;}
+#endif
 
     _LIBCPP_INLINE_VISIBILITY
     __hash_value_type& operator=(__hash_value_type&& __v)
+#ifdef __CHEERP__
+        {reinterpret_cast<__nc_value_type&>(__cc) = _VSTD::move(reinterpret_cast<__nc_value_type&>(__v.__cc)); return *this;}
+#else
         {__nc = _VSTD::move(__v.__nc); return *this;}
+#endif
 
     _LIBCPP_INLINE_VISIBILITY
     ~__hash_value_type() {__cc.~value_type();}

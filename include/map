@@ -576,10 +576,14 @@ template <class _Key, class _Tp, class _Compare, class _Allocator>
     class multimap;
 template <class _TreeIterator> class __map_const_iterator;
 
-#if __cplusplus >= 201103L && !defined(__CHEERP__)
+#if __cplusplus >= 201103L
 
 template <class _Key, class _Tp>
+#ifdef __CHEERP__
+struct __value_type
+#else
 union __value_type
+#endif
 {
     typedef _Key                                     key_type;
     typedef _Tp                                      mapped_type;
@@ -587,7 +591,9 @@ union __value_type
     typedef pair<key_type, mapped_type>              __nc_value_type;
 
     value_type __cc;
+#ifndef __CHEERP__
     __nc_value_type __nc;
+#endif
 
     template <class ..._Args>
     _LIBCPP_INLINE_VISIBILITY
@@ -604,15 +610,27 @@ union __value_type
 
     _LIBCPP_INLINE_VISIBILITY
     __value_type(__value_type&& __v)
+#ifdef __CHEERP__
+        : __cc(std::move(__v.__cc)) {}
+#else
         : __nc(std::move(__v.__nc)) {}
+#endif
 
     _LIBCPP_INLINE_VISIBILITY
     __value_type& operator=(const __value_type& __v)
+#ifdef __CHEERP__
+        {reinterpret_cast<__nc_value_type&>(__cc) = __v.__cc; return *this;}
+#else
         {__nc = __v.__cc; return *this;}
+#endif
 
     _LIBCPP_INLINE_VISIBILITY
     __value_type& operator=(__value_type&& __v)
+#ifdef __CHEERP__
+        {reinterpret_cast<__nc_value_type&>(__cc) = std::move(reinterpret_cast<__nc_value_type&>(__v.__cc)); return *this;}
+#else
         {__nc = std::move(__v.__nc); return *this;}
+#endif
 
     _LIBCPP_INLINE_VISIBILITY
     ~__value_type() {__cc.~value_type();}
@@ -626,7 +644,6 @@ struct __value_type
     typedef _Key                                     key_type;
     typedef _Tp                                      mapped_type;
     typedef pair<const key_type, mapped_type>        value_type;
-    typedef pair<key_type, mapped_type>              __nc_value_type;
 
     value_type __cc;
 
@@ -642,10 +659,6 @@ struct __value_type
     _LIBCPP_INLINE_VISIBILITY
     __value_type(const _A0& __a0, const _A1& __a1)
         : __cc(__a0, __a1) {}
-
-    _LIBCPP_INLINE_VISIBILITY
-    __value_type& operator=(const __value_type& __v)
-        {reinterpret_cast<__nc_value_type&>(__cc) = __v.__cc; return *this;}
 };
 
 #endif
