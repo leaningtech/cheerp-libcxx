@@ -1810,7 +1810,7 @@ public:
         if (__n > max_size())
             __throw_length_error("allocator<T>::allocate(size_t n)"
                                  " 'n' exceeds maximum supported size");
-        return static_cast<pointer>(new _Tp [__n] [[noinit]]);
+        return static_cast<pointer>(new _Tp [__n] [[cheerp::noinit]]);
         }
     _LIBCPP_INLINE_VISIBILITY void deallocate(pointer __p, size_type __n) _NOEXCEPT
         {delete[] ((void*)__p);}
@@ -1911,7 +1911,7 @@ public:
         if (__n > max_size())
             __throw_length_error("allocator<const T>::allocate(size_t n)"
                                  " 'n' exceeds maximum supported size");
-        return static_cast<pointer>(new _Tp[__n] [[noinit]]);
+        return static_cast<pointer>(new _Tp[__n] [[cheerp::noinit]]);
     }
     _LIBCPP_INLINE_VISIBILITY void deallocate(pointer __p, size_type __n) _NOEXCEPT
         {delete[] ((void*)__p);}
