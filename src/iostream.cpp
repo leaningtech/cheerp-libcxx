@@ -14,32 +14,32 @@
 _LIBCPP_BEGIN_NAMESPACE_STD
 
 #ifndef _LIBCPP_HAS_NO_STDIN
-_LIBCPP_FUNC_VIS istream cin [[noinit]];
-static __stdinbuf<char> __cin [[noinit]];
+_LIBCPP_FUNC_VIS istream cin [[cheerp::noinit]];
+static __stdinbuf<char> __cin [[cheerp::noinit]];
 static mbstate_t mb_cin;
-_LIBCPP_FUNC_VIS wistream wcin  [[noinit]];
-static __stdinbuf<wchar_t>  __wcin [[noinit]];
+_LIBCPP_FUNC_VIS wistream wcin  [[cheerp::noinit]];
+static __stdinbuf<wchar_t>  __wcin [[cheerp::noinit]];
 static mbstate_t mb_wcin;
 #endif
 
 #ifndef _LIBCPP_HAS_NO_STDOUT
-_LIBCPP_FUNC_VIS ostream cout [[noinit]];
-static __stdoutbuf<char> __cout [[noinit]];
+_LIBCPP_FUNC_VIS ostream cout [[cheerp::noinit]];
+static __stdoutbuf<char> __cout [[cheerp::noinit]];
 static mbstate_t mb_cout;
-_LIBCPP_FUNC_VIS wostream wcout [[noinit]];
-static __stdoutbuf<wchar_t> __wcout [[noinit]];
+_LIBCPP_FUNC_VIS wostream wcout [[cheerp::noinit]];
+static __stdoutbuf<wchar_t> __wcout [[cheerp::noinit]];
 static mbstate_t mb_wcout;
 #endif
 
-_LIBCPP_FUNC_VIS ostream cerr [[noinit]];
-static __stdoutbuf<char> __cerr [[noinit]];
+_LIBCPP_FUNC_VIS ostream cerr [[cheerp::noinit]];
+static __stdoutbuf<char> __cerr [[cheerp::noinit]];
 static mbstate_t mb_cerr;
-_LIBCPP_FUNC_VIS wostream wcerr [[noinit]];
-static __stdoutbuf<wchar_t> __wcerr [[noinit]];
+_LIBCPP_FUNC_VIS wostream wcerr [[cheerp::noinit]];
+static __stdoutbuf<wchar_t> __wcerr [[cheerp::noinit]];
 static mbstate_t mb_wcerr;
 
-_LIBCPP_FUNC_VIS ostream clog [[noinit]];
-_LIBCPP_FUNC_VIS wostream wclog [[noinit]];
+_LIBCPP_FUNC_VIS ostream clog [[cheerp::noinit]];
+_LIBCPP_FUNC_VIS wostream wclog [[cheerp::noinit]];
 
 ios_base::Init __start_std_streams;
 
