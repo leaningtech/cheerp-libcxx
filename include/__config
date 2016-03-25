@@ -120,7 +120,6 @@
 #ifdef __CHEERP__
 # define _LIBCPP_LITTLE_ENDIAN 1
 # define _LIBCPP_BIG_ENDIAN    0
-# define _LIBCPP_HAS_NO_LONG_LONG
 # define _LIBCPP_HAS_NO_THREADS
 #endif
 
