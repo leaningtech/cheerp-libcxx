@@ -19,6 +19,8 @@
 #if !defined(_LIBCPP_HAS_NO_MONOTONIC_CLOCK) && !defined(CLOCK_MONOTONIC)
 #if __APPLE__
 #include <mach/mach_time.h>  // mach_absolute_time, mach_timebase_info_data_t
+#elif defined(__CHEERP__)
+#include <cheerp/clientlib.h>
 #else
 #error "Monotonic clock not implemented"
 #endif
@@ -37,10 +39,15 @@ system_clock::time_point
 system_clock::now() _NOEXCEPT
 {
 #ifdef CLOCK_REALTIME
+#ifdef __CHEERP__
+    double val = client::Date::now();
+    return time_point(milliseconds((long long)val));
+#else
     struct timespec tp;
     if (0 != clock_gettime(CLOCK_REALTIME, &tp))
         __throw_system_error(errno, "clock_gettime(CLOCK_REALTIME) failed");
     return time_point(seconds(tp.tv_sec) + microseconds(tp.tv_nsec / 1000));
+#endif
 #else  // !CLOCK_REALTIME
     timeval tv;
     gettimeofday(&tv, 0);
@@ -138,6 +145,7 @@ steady_clock::now() _NOEXCEPT
     return time_point(duration(fp()));
 }
 
+#elif defined(__CHEERP__)
 #else
 #error "Monotonic clock not implemented"
 #endif
