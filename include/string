@@ -1847,7 +1847,10 @@ private:
     enum {__alignment = 16};
     static _LIBCPP_INLINE_VISIBILITY
     size_type __recommend(size_type __s) _NOEXCEPT
-        {return (__s < __min_cap ? __min_cap :
+        {return (
+#ifndef __CHEERP__
+                 __s < __min_cap ? __min_cap :
+#endif
                  __align_it<sizeof(value_type) < __alignment ?
                             __alignment/sizeof(value_type) : 1 > (__s+1)) - 1;}
 
