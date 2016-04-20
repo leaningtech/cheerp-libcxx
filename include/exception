@@ -133,7 +133,6 @@ public:
     exception_ptr& operator=(const exception_ptr&) _NOEXCEPT;
     ~exception_ptr() _NOEXCEPT;
 
-#ifndef __CHEERP__
     _LIBCPP_INLINE_VISIBILITY
     _LIBCPP_EXPLICIT
         operator bool() const _NOEXCEPT {return __ptr_ != nullptr;}
@@ -144,7 +143,6 @@ public:
     friend _LIBCPP_INLINE_VISIBILITY
     bool operator!=(const exception_ptr& __x, const exception_ptr& __y) _NOEXCEPT
         {return !(__x == __y);}
-#endif
 
     friend _LIBCPP_FUNC_VIS exception_ptr current_exception() _NOEXCEPT;
     friend _LIBCPP_FUNC_VIS void rethrow_exception(exception_ptr);
