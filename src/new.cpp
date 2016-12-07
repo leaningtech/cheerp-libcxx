@@ -37,7 +37,7 @@
 
 #ifndef __GLIBCXX__
 
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
 // Implement all new and delete operators as weak definitions
 // in this shared library, so that they can be overriden by programs
 // that define non-weak copies of the functions.
@@ -160,7 +160,7 @@ operator delete[] (void* ptr, size_t) _NOEXCEPT
     ::operator delete[](ptr);
 }
 
-#endif // !__CHEERP__
+#endif // !defined(__CHEERP__) || defined(__ASMJS__)
 
 #endif // !__GLIBCXX__
 
