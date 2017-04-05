@@ -105,6 +105,14 @@ set_property(CACHE LIBCXX_CXX_ABI PROPERTY STRINGS ;${CXXABIS})
 # link with libunwind or libgcc_s while running the test cases.
 option(LIBCXXABI_USE_LLVM_UNWINDER "Build and use the LLVM unwinder." OFF)
 
+if (CMAKE_SYSTEM_NAME STREQUAL "Cheerp")
+  set(CHEERP_MODE "genericjs" CACHE STRING "Cheerp mode used to build the library")
+  set_property(CACHE CHEERP_MODE PROPERTY STRINGS genericjs asmjs)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib -frtti -cheerp-mode=${CHEERP_MODE}")
+else ()
+  set(CHEERP_MODE "")
+endif ()
+
 #===============================================================================
 # Configure System
 #===============================================================================
