@@ -23,6 +23,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if defined(__CHEERP__)
+#include <cheerp/clientlib.h>
+#endif
+
 #if defined(_LIBCPP_USING_DEV_RANDOM)
 #include <fcntl.h>
 #include <unistd.h>
@@ -33,7 +37,7 @@
 
 _LIBCPP_BEGIN_NAMESPACE_STD
 
-#if defined(_LIBCPP_USING_ARC4_RANDOM)
+#if defined(_LIBCPP_USING_ARC4_RANDOM) || defined(__CHEERP__)
 
 random_device::random_device(const string& __token)
 {
@@ -48,7 +52,11 @@ random_device::~random_device()
 unsigned
 random_device::operator()()
 {
+#ifdef __CHEERP__
+    return client::Math.random() * (65536.0 * 65536.0);
+#else
     return arc4random();
+#endif
 }
 
 #elif defined(_LIBCPP_USING_DEV_RANDOM)
