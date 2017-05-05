@@ -575,10 +575,10 @@ union __hash_value_type
         {reinterpret_cast<__nc_value_type&>(__cc) = _VSTD::move(reinterpret_cast<__nc_value_type&>(__v.__cc)); return *this;}
 #else
         {__nc = _VSTD::move(__v.__nc); return *this;}
-#endif
 
     _LIBCPP_INLINE_VISIBILITY
     ~__hash_value_type() {__cc.~value_type();}
+#endif
 };
 
 #else

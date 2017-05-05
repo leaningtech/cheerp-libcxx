@@ -630,10 +630,10 @@ union __value_type
         {reinterpret_cast<__nc_value_type&>(__cc) = std::move(reinterpret_cast<__nc_value_type&>(__v.__cc)); return *this;}
 #else
         {__nc = std::move(__v.__nc); return *this;}
-#endif
 
     _LIBCPP_INLINE_VISIBILITY
     ~__value_type() {__cc.~value_type();}
+#endif
 };
 
 #else
