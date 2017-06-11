@@ -33,7 +33,7 @@
 #if __APPLE__
 #include <mach/mach_time.h>  // mach_absolute_time, mach_timebase_info_data_t
 #elif defined(__CHEERP__)
-#include <cheerp/clientlib.h>
+#include <cheerp/client.h>
 #elif !defined(_LIBCPP_WIN32API) && !defined(CLOCK_MONOTONIC)
 #error "Monotonic clock not implemented"
 #endif
@@ -78,7 +78,7 @@ system_clock::now() _NOEXCEPT
 #else
 #if defined(_LIBCPP_USE_CLOCK_GETTIME) && defined(CLOCK_REALTIME)
 #ifdef __CHEERP__
-    double val = client::Date::now();
+    double val = cheerp::date_now();
     return time_point(milliseconds((long long)val));
 #else
   struct timespec tp;
@@ -220,7 +220,7 @@ steady_clock::now() _NOEXCEPT
 steady_clock::time_point
 steady_clock::now() _NOEXCEPT
 {
-    double val = client::Date::now();
+    double val = cheerp::date_now();
     return time_point(milliseconds((long long)val));
 }
 
