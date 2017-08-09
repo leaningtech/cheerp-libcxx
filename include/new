@@ -47,13 +47,14 @@ new_handler get_new_handler() noexcept;
 
 }  // std
 
-void* operator new(std::size_t size);                                   // replaceable
-void* operator new(std::size_t size, const std::nothrow_t&) noexcept;   // replaceable
+[[cheerp::default_new]]
 void  operator delete(void* ptr) noexcept;                              // replaceable
 void  operator delete(void* ptr, std::size_t size) noexcept;            // replaceable, C++14
 void  operator delete(void* ptr, const std::nothrow_t&) noexcept;       // replaceable
 
+[[cheerp::default_new]]
 void* operator new[](std::size_t size);                                 // replaceable
+[[cheerp::default_new]]
 void* operator new[](std::size_t size, const std::nothrow_t&) noexcept; // replaceable
 void  operator delete[](void* ptr) noexcept;                            // replaceable
 void  operator delete[](void* ptr, std::size_t size) noexcept;          // replaceable, C++14
@@ -128,11 +129,13 @@ _LIBCPP_FUNC_VIS new_handler get_new_handler() _NOEXCEPT;
 # define _LIBCPP_NEW_DELETE_VIS _LIBCPP_FUNC_VIS
 #endif
 
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void* operator new(std::size_t __sz)
 #if !__has_feature(cxx_noexcept)
     throw(std::bad_alloc)
 #endif
 ;
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void* operator new(std::size_t __sz, const std::nothrow_t&) _NOEXCEPT _NOALIAS;
 _LIBCPP_NEW_DELETE_VIS void  operator delete(void* __p) _NOEXCEPT;
 _LIBCPP_NEW_DELETE_VIS void  operator delete(void* __p, const std::nothrow_t&) _NOEXCEPT;
@@ -141,11 +144,13 @@ _LIBCPP_NEW_DELETE_VIS void  operator delete(void* __p, const std::nothrow_t&) _
 _LIBCPP_NEW_DELETE_VIS void  operator delete(void* __p, std::size_t __sz) _NOEXCEPT;
 #endif
 
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void* operator new[](std::size_t __sz)
 #if !__has_feature(cxx_noexcept)
     throw(std::bad_alloc)
 #endif
 ;
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void* operator new[](std::size_t __sz, const std::nothrow_t&) _NOEXCEPT _NOALIAS;
 _LIBCPP_NEW_DELETE_VIS void  operator delete[](void* __p) _NOEXCEPT;
 _LIBCPP_NEW_DELETE_VIS void  operator delete[](void* __p, const std::nothrow_t&) _NOEXCEPT;
