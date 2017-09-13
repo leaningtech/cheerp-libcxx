@@ -1603,6 +1603,7 @@ __tree<_Tp, _Compare, _Allocator>::__find_leaf(const_iterator __hint,
 // If __v exists, set parent to node of __v and return reference to node of __v
 template <class _Tp, class _Compare, class _Allocator>
 template <class _Key>
+inline _LIBCPP_INLINE_VISIBILITY
 typename __tree<_Tp, _Compare, _Allocator>::__node_base::pointer&
 __tree<_Tp, _Compare, _Allocator>::__find_equal(typename __node_base::pointer& __parent,
                                                 const _Key& __v)
@@ -1652,6 +1653,7 @@ __tree<_Tp, _Compare, _Allocator>::__find_equal(typename __node_base::pointer& _
 // If __v exists, set parent to node of __v and return reference to node of __v
 template <class _Tp, class _Compare, class _Allocator>
 template <class _Key>
+inline _LIBCPP_INLINE_VISIBILITY
 typename __tree<_Tp, _Compare, _Allocator>::__node_base::pointer&
 __tree<_Tp, _Compare, _Allocator>::__find_equal(const_iterator __hint,
                                                 typename __node_base::pointer& __parent,
