@@ -1225,6 +1225,7 @@ private:
 // Return reference to null leaf
 // If __k exists, set parent to node of __k and return reference to node of __k
 template <class _Key, class _Tp, class _Compare, class _Allocator>
+inline _LIBCPP_INLINE_VISIBILITY
 typename map<_Key, _Tp, _Compare, _Allocator>::__node_base_pointer&
 map<_Key, _Tp, _Compare, _Allocator>::__find_equal_key(__node_base_pointer& __parent,
                                                        const key_type& __k)
