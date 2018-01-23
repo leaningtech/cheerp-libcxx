@@ -663,6 +663,8 @@ void* align(size_t alignment, size_t size, void*& ptr, size_t& space);
 #include <stdexcept>
 #include <cstring>
 #include <cassert>
+#include <cstdlib>
+
 #if !defined(_LIBCPP_HAS_NO_ATOMIC_HEADER)
 #  include <atomic>
 #endif
@@ -1810,10 +1812,10 @@ public:
         if (__n > max_size())
             __throw_length_error("allocator<T>::allocate(size_t n)"
                                  " 'n' exceeds maximum supported size");
-        return static_cast<pointer>(new _Tp [__n] [[cheerp::noinit]]);
+        return static_cast<pointer>(malloc(sizeof(_Tp)*__n));
         }
     _LIBCPP_INLINE_VISIBILITY void deallocate(pointer __p, size_type __n) _NOEXCEPT
-        {delete[] ((void*)__p);}
+        {free(__p);}
     _LIBCPP_INLINE_VISIBILITY size_type max_size() const _NOEXCEPT
         {return size_type(~0) / sizeof(_Tp);}
 #if !defined(_LIBCPP_HAS_NO_RVALUE_REFERENCES) && !defined(_LIBCPP_HAS_NO_VARIADICS)
@@ -1911,10 +1913,10 @@ public:
         if (__n > max_size())
             __throw_length_error("allocator<const T>::allocate(size_t n)"
                                  " 'n' exceeds maximum supported size");
-        return static_cast<pointer>(new _Tp[__n] [[cheerp::noinit]]);
+        return static_cast<pointer>(malloc(sizeof(_Tp)*__n));
     }
     _LIBCPP_INLINE_VISIBILITY void deallocate(pointer __p, size_type __n) _NOEXCEPT
-        {delete[] ((void*)__p);}
+        {free(__p);}
     _LIBCPP_INLINE_VISIBILITY size_type max_size() const _NOEXCEPT
         {return size_type(~0) / sizeof(_Tp);}
 #if !defined(_LIBCPP_HAS_NO_RVALUE_REFERENCES) && !defined(_LIBCPP_HAS_NO_VARIADICS)
