@@ -49,6 +49,9 @@ random_device::~random_device()
 {
 }
 
+#ifdef __CHEERP__
+[[cheerp::genericjs]]
+#endif
 unsigned
 random_device::operator()()
 {
