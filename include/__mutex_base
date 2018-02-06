@@ -276,16 +276,25 @@ _LIBCPP_DECLARE_STRONG_ENUM(cv_status)
 };
 _LIBCPP_DECLARE_STRONG_ENUM_EPILOG(cv_status)
 
-#ifndef __CHEERP__
 class _LIBCPP_TYPE_VIS condition_variable
 {
+#ifndef __CHEERP__
     pthread_cond_t __cv_;
+#endif
 public:
     _LIBCPP_INLINE_VISIBILITY
 #ifndef _LIBCPP_HAS_NO_CONSTEXPR
+#ifdef __CHEERP__
+    constexpr condition_variable() {}
+#else
     constexpr condition_variable() : __cv_(PTHREAD_COND_INITIALIZER) {}
+#endif
+#else
+#ifdef __CHEERP__
+    condition_variable() {}
 #else
     condition_variable() {__cv_ = (pthread_cond_t)PTHREAD_COND_INITIALIZER;}
+#endif
 #endif
     ~condition_variable();
 
@@ -323,8 +332,10 @@ public:
                  const chrono::duration<_Rep, _Period>& __d,
                  _Predicate __pred);
 
+#ifndef __CHEERP__
     typedef pthread_cond_t* native_handle_type;
     _LIBCPP_INLINE_VISIBILITY native_handle_type native_handle() {return &__cv_;}
+#endif
 
 private:
     void __do_timed_wait(unique_lock<mutex>& __lk,
@@ -412,7 +423,6 @@ condition_variable::wait_for(unique_lock<mutex>& __lk,
     return wait_until(__lk, chrono::steady_clock::now() + __d,
                       _VSTD::move(__pred));
 }
-#endif
 
 #endif // !_LIBCPP_HAS_NO_THREADS
 
