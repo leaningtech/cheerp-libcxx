@@ -29,11 +29,13 @@
 #endif // !defined(CLOCK_REALTIME)
 #endif // defined(_LIBCPP_WIN32API)
 
+#if defined(__CHEERP__)
+#include <cheerp/client.h>
+#endif
+
 #if !defined(_LIBCPP_HAS_NO_MONOTONIC_CLOCK)
 #if __APPLE__
 #include <mach/mach_time.h>  // mach_absolute_time, mach_timebase_info_data_t
-#elif defined(__CHEERP__)
-#include <cheerp/client.h>
 #elif !defined(_LIBCPP_WIN32API) && !defined(CLOCK_MONOTONIC)
 #error "Monotonic clock not implemented"
 #endif
