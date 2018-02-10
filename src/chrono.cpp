@@ -16,11 +16,13 @@
 #include <sys/time.h>        // for gettimeofday and timeval
 #endif
 
+#if defined(__CHEERP__)
+#include <cheerp/client.h>
+#endif
+
 #if !defined(_LIBCPP_HAS_NO_MONOTONIC_CLOCK) && !defined(CLOCK_MONOTONIC)
 #if __APPLE__
 #include <mach/mach_time.h>  // mach_absolute_time, mach_timebase_info_data_t
-#elif defined(__CHEERP__)
-#include <cheerp/client.h>
 #else
 #error "Monotonic clock not implemented"
 #endif
