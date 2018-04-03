@@ -3,8 +3,6 @@ set(LIBCXX_LIB_CMAKEFILES_DIR "${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTOR
 # Get sources
 # FIXME: Don't use glob here
 file(GLOB LIBCXX_SOURCES ../src/*.cpp)
-# Cheerp: Remove istream/ostream users as they depend on virtual bases
-list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/strstream.cpp")
 # Cheerp: Remove pthread related stuff
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/debug.cpp")
 list(REMOVE_ITEM LIBCXX_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../src/thread.cpp")
