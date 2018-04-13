@@ -49,15 +49,20 @@ new_handler get_new_handler() noexcept;
 
 [[cheerp::default_new]]
 void  operator delete(void* ptr) noexcept;                              // replaceable
+[[cheerp::default_new]]
 void  operator delete(void* ptr, std::size_t size) noexcept;            // replaceable, C++14
+[[cheerp::default_new]]
 void  operator delete(void* ptr, const std::nothrow_t&) noexcept;       // replaceable
 
 [[cheerp::default_new]]
 void* operator new[](std::size_t size);                                 // replaceable
 [[cheerp::default_new]]
 void* operator new[](std::size_t size, const std::nothrow_t&) noexcept; // replaceable
+[[cheerp::default_new]]
 void  operator delete[](void* ptr) noexcept;                            // replaceable
+[[cheerp::default_new]]
 void  operator delete[](void* ptr, std::size_t size) noexcept;          // replaceable, C++14
+[[cheerp::default_new]]
 void  operator delete[](void* ptr, const std::nothrow_t&) noexcept;     // replaceable
 
 void* operator new  (std::size_t size, void* ptr) noexcept;
@@ -137,7 +142,9 @@ _LIBCPP_NEW_DELETE_VIS void* operator new(std::size_t __sz)
 ;
 [[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void* operator new(std::size_t __sz, const std::nothrow_t&) _NOEXCEPT _NOALIAS;
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void  operator delete(void* __p) _NOEXCEPT;
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void  operator delete(void* __p, const std::nothrow_t&) _NOEXCEPT;
 #if defined(_LIBCPP_BUILDING_NEW) || _LIBCPP_STD_VER >= 14 || \
     (defined(__cpp_sized_deallocation) && __cpp_sized_deallocation >= 201309)
@@ -152,7 +159,9 @@ _LIBCPP_NEW_DELETE_VIS void* operator new[](std::size_t __sz)
 ;
 [[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void* operator new[](std::size_t __sz, const std::nothrow_t&) _NOEXCEPT _NOALIAS;
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void  operator delete[](void* __p) _NOEXCEPT;
+[[cheerp::default_new]]
 _LIBCPP_NEW_DELETE_VIS void  operator delete[](void* __p, const std::nothrow_t&) _NOEXCEPT;
 #if defined(_LIBCPP_BUILDING_NEW) || _LIBCPP_STD_VER >= 14 || \
     (defined(__cpp_sized_deallocation) && __cpp_sized_deallocation >= 201309)
