@@ -1215,7 +1215,7 @@ private:
         __find_equal_key(__node_base_pointer& __parent, const key_type& __k);
     __node_base_const_pointer
         __find_equal_key(__node_base_const_pointer& __parent, const key_type& __k) const;
-#ifdef __CHEERP__
+#ifndef __ASMJS__
     static_assert(!std::is_pointer<_Key>::value, "Cheerp: std::map with pointers as keys is not currently supported, use std::unordered_map");
 #endif
 };
@@ -1944,7 +1944,7 @@ private:
         __node_holder __construct_node(_A0&& __a0, _A1&& __a1, _Args&& ...__args);
 #endif  // _LIBCPP_HAS_NO_VARIADICS
 #endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
-#ifdef __CHEERP__
+#ifndef __ASMJS__
     static_assert(!std::is_pointer<_Key>::value, "Cheerp: std::multimap with pointers as keys is not currently supported");
 #endif
 };
