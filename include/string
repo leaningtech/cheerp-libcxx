@@ -2015,6 +2015,7 @@ basic_string<_CharT, _Traits, _Allocator>::basic_string()
 template <class _CharT, class _Traits, class _Allocator>
 inline _LIBCPP_INLINE_VISIBILITY
 basic_string<_CharT, _Traits, _Allocator>::basic_string(const allocator_type& __a)
+        _NOEXCEPT_(is_nothrow_copy_constructible<allocator_type>::value)
     : __r_(__a)
 {
 #if _LIBCPP_DEBUG_LEVEL >= 2
