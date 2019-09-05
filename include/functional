@@ -1335,7 +1335,7 @@ public:
     _LIBCPP_INLINE_VISIBILITY __base() {}
     _LIBCPP_INLINE_VISIBILITY virtual ~__base() {}
     virtual __base* __clone() const = 0;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     virtual void __clone(__base*) const = 0;
 #endif
     virtual void destroy() _NOEXCEPT = 0;
@@ -1374,7 +1374,7 @@ public:
         : __f_(piecewise_construct, _VSTD::forward_as_tuple(_VSTD::move(__f)),
                                     _VSTD::forward_as_tuple(_VSTD::move(__a))) {}
     virtual __base<_Rp(_ArgTypes...)>* __clone() const;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     virtual void __clone(__base<_Rp(_ArgTypes...)>*) const;
 #endif
     virtual void destroy() _NOEXCEPT;
@@ -1399,7 +1399,7 @@ __func<_Fp, _Alloc, _Rp(_ArgTypes...)>::__clone() const
     return __hold.release();
 }
 
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
 template<class _Fp, class _Alloc, class _Rp, class ..._ArgTypes>
 void
 __func<_Fp, _Alloc, _Rp(_ArgTypes...)>::__clone(__base<_Rp(_ArgTypes...)>* __p) const
@@ -1462,7 +1462,7 @@ class _LIBCPP_TYPE_VIS_ONLY function<_Rp(_ArgTypes...)>
       public __function::__maybe_derive_from_binary_function<_Rp(_ArgTypes...)>
 {
     typedef __function::__base<_Rp(_ArgTypes...)> __base;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     typename aligned_storage<3*sizeof(void*)>::type __buf_;
 #endif
     __base* __f_;
@@ -1592,7 +1592,7 @@ function<_Rp(_ArgTypes...)>::function(const function& __f)
 {
     if (__f.__f_ == 0)
         __f_ = 0;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     else if (__f.__f_ == (const __base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
@@ -1610,7 +1610,7 @@ function<_Rp(_ArgTypes...)>::function(allocator_arg_t, const _Alloc&,
 {
     if (__f.__f_ == 0)
         __f_ = 0;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     else if (__f.__f_ == (const __base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
@@ -1626,7 +1626,7 @@ function<_Rp(_ArgTypes...)>::function(function&& __f) _NOEXCEPT
 {
     if (__f.__f_ == 0)
         __f_ = 0;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     else if (__f.__f_ == (__base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
@@ -1647,7 +1647,7 @@ function<_Rp(_ArgTypes...)>::function(allocator_arg_t, const _Alloc&,
 {
     if (__f.__f_ == 0)
         __f_ = 0;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     else if (__f.__f_ == (__base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
@@ -1675,7 +1675,7 @@ function<_Rp(_ArgTypes...)>::function(_Fp __f,
     if (__not_null(__f))
     {
         typedef __function::__func<_Fp, allocator<_Fp>, _Rp(_ArgTypes...)> _FF;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
         if (sizeof(_FF) <= sizeof(__buf_) && is_nothrow_copy_constructible<_Fp>::value)
         {
             __f_ = (__base*)&__buf_;
@@ -1706,7 +1706,7 @@ function<_Rp(_ArgTypes...)>::function(allocator_arg_t, const _Alloc& __a0, _Fp _
         typedef __function::__func<_Fp, _Alloc, _Rp(_ArgTypes...)> _FF;
         typedef typename __rebind_alloc_helper<__alloc_traits, _FF>::type _Ap;
         _Ap __a(__a0);
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
         if (sizeof(_FF) <= sizeof(__buf_) && 
             is_nothrow_copy_constructible<_Fp>::value && is_nothrow_copy_constructible<_Ap>::value)
         {
@@ -1736,7 +1736,7 @@ template<class _Rp, class ..._ArgTypes>
 function<_Rp(_ArgTypes...)>&
 function<_Rp(_ArgTypes...)>::operator=(function&& __f) _NOEXCEPT
 {
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     if (__f_ == (__base*)&__buf_)
         __f_->destroy();
     else
@@ -1746,7 +1746,7 @@ function<_Rp(_ArgTypes...)>::operator=(function&& __f) _NOEXCEPT
     __f_ = 0;
     if (__f.__f_ == 0)
         __f_ = 0;
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     else if (__f.__f_ == (__base*)&__f.__buf_)
     {
         __f_ = (__base*)&__buf_;
@@ -1765,7 +1765,7 @@ template<class _Rp, class ..._ArgTypes>
 function<_Rp(_ArgTypes...)>&
 function<_Rp(_ArgTypes...)>::operator=(nullptr_t) _NOEXCEPT
 {
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     if (__f_ == (__base*)&__buf_)
         __f_->destroy();
     else
@@ -1793,7 +1793,7 @@ function<_Rp(_ArgTypes...)>::operator=(_Fp&& __f)
 template<class _Rp, class ..._ArgTypes>
 function<_Rp(_ArgTypes...)>::~function()
 {
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     if (__f_ == (__base*)&__buf_)
         __f_->destroy();
     else
@@ -1806,7 +1806,7 @@ template<class _Rp, class ..._ArgTypes>
 void
 function<_Rp(_ArgTypes...)>::swap(function& __f) _NOEXCEPT
 {
-#ifndef __CHEERP__
+#if !defined(__CHEERP__) || defined(__ASMJS__)
     if (__f_ == (__base*)&__buf_ && __f.__f_ == (__base*)&__f.__buf_)
     {
         typename aligned_storage<sizeof(__buf_)>::type __tempbuf;
