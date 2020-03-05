@@ -1690,7 +1690,6 @@ template <unsigned long long __a, unsigned long long __c,
           bool _MightOverflow = (__a != 0 && __m != 0 && __m-1 > (_Mp-__c)/__a)>
 struct __lce_ta;
 
-#ifndef __CHEERP__
 // 64
 
 template <unsigned long long __a, unsigned long long __c, unsigned long long __m>
@@ -1749,7 +1748,6 @@ struct __lce_ta<__a, __c, 0, (unsigned long long)(~0), false>
         return __a * __x + __c;
     }
 };
-#endif
 
 // 32
 
@@ -1901,11 +1899,7 @@ public:
         seed(_Sseq& __q)
             {__seed(__q, integral_constant<unsigned,
                 1 + (__m == 0 ? (sizeof(result_type) * __CHAR_BIT__ - 1)/32
-#ifdef __CHEERP__
-                             :  (false))>());}
-#else
                              :  (__m > 0x100000000ull))>());}
-#endif
 
     // generating functions
     _LIBCPP_INLINE_VISIBILITY
@@ -1984,7 +1978,6 @@ linear_congruential_engine<_UIntType, __a, __c, __m>::__seed(_Sseq& __q,
     __x_ = __c == 0 && __s == 0 ? result_type(1) : __s;
 }
 
-#ifndef __CHEERP__
 template <class _UIntType, _UIntType __a, _UIntType __c, _UIntType __m>
 template<class _Sseq>
 void
@@ -1998,7 +1991,6 @@ linear_congruential_engine<_UIntType, __a, __c, __m>::__seed(_Sseq& __q,
                                               ((uint64_t)__ar[4] << 32)) % __m);
     __x_ = __c == 0 && __s == 0 ? result_type(1) : __s;
 }
-#endif
 
 template <class _CharT, class _Traits,
           class _UIntType, _UIntType __a, _UIntType __c, _UIntType __m>
@@ -2365,7 +2357,6 @@ mersenne_twister_engine<_UIntType, __w, __n, __m, __r, __a, __u, __d, __s, __b,
     }
 }
 
-#ifndef __CHEERP__
 template <class _UIntType, size_t __w, size_t __n, size_t __m, size_t __r,
           _UIntType __a, size_t __u, _UIntType __d, size_t __s,
           _UIntType __b, size_t __t, _UIntType __c, size_t __l, _UIntType __f>
@@ -2391,7 +2382,6 @@ mersenne_twister_engine<_UIntType, __w, __n, __m, __r, __a, __u, __d, __s, __b,
         __x_[0] = _Max;
     }
 }
-#endif
 
 template <class _UIntType, size_t __w, size_t __n, size_t __m, size_t __r,
           _UIntType __a, size_t __u, _UIntType __d, size_t __s,
@@ -2519,13 +2509,11 @@ typedef mersenne_twister_engine<uint_fast32_t, 32, 624, 397, 31,
                                 7,  0x9d2c5680,
                                 15, 0xefc60000,
                                 18, 1812433253>                         mt19937;
-#ifndef __CHEERP__
 typedef mersenne_twister_engine<uint_fast64_t, 64, 312, 156, 31,
                                 0xb5026f5aa96619e9ULL, 29, 0x5555555555555555ULL,
                                 17, 0x71d67fffeda60000ULL,
                                 37, 0xfff7eee000000000ULL,
                                 43, 6364136223846793005ULL>          mt19937_64;
-#endif
 
 // subtract_with_carry_engine
 
@@ -2681,7 +2669,6 @@ subtract_with_carry_engine<_UIntType, __w, __s, __r>::seed(result_type __sd,
     __i_ = 0;
 }
 
-#ifndef __CHEERP__
 template<class _UIntType, size_t __w, size_t __s, size_t __r>
 void
 subtract_with_carry_engine<_UIntType, __w, __s, __r>::seed(result_type __sd,
@@ -2698,7 +2685,6 @@ subtract_with_carry_engine<_UIntType, __w, __s, __r>::seed(result_type __sd,
     __c_ = __x_[__r-1] == 0;
     __i_ = 0;
 }
-#endif
 
 template<class _UIntType, size_t __w, size_t __s, size_t __r>
 template<class _Sseq>
@@ -2715,7 +2701,6 @@ subtract_with_carry_engine<_UIntType, __w, __s, __r>::__seed(_Sseq& __q,
     __i_ = 0;
 }
 
-#ifndef __CHEERP__
 template<class _UIntType, size_t __w, size_t __s, size_t __r>
 template<class _Sseq>
 void
@@ -2731,7 +2716,6 @@ subtract_with_carry_engine<_UIntType, __w, __s, __r>::__seed(_Sseq& __q,
     __c_ = __x_[__r-1] == 0;
     __i_ = 0;
 }
-#endif
 
 template<class _UIntType, size_t __w, size_t __s, size_t __r>
 _UIntType
@@ -2840,9 +2824,7 @@ operator>>(basic_istream<_CharT, _Traits>& __is,
 }
 
 typedef subtract_with_carry_engine<uint_fast32_t, 24, 10, 24>     ranlux24_base;
-#ifndef __CHEERP__
 typedef subtract_with_carry_engine<uint_fast64_t, 48,  5, 12>     ranlux48_base;
-#endif
 
 // discard_block_engine
 
@@ -3015,9 +2997,7 @@ operator>>(basic_istream<_CharT, _Traits>& __is,
 }
 
 typedef discard_block_engine<ranlux24_base, 223, 23> ranlux24;
-#ifndef __CHEERP__
 typedef discard_block_engine<ranlux48_base, 389, 11> ranlux48;
-#endif
 
 // independent_bits_engine
 
@@ -3260,7 +3240,6 @@ operator>>(basic_istream<_CharT, _Traits>& __is,
 
 // shuffle_order_engine
 
-#ifndef __CHEERP__
 template <uint64_t _Xp, uint64_t _Yp>
 struct __ugcd
 {
@@ -3284,7 +3263,6 @@ public:
 
     typedef __uratio<num, den> type;
 };
-#endif
 
 template<class _Engine, size_t __k>
 class _LIBCPP_TYPE_VIS_ONLY shuffle_order_engine
@@ -3399,7 +3377,6 @@ private:
 
     _LIBCPP_INLINE_VISIBILITY
     result_type __eval(false_type) {return __eval2(integral_constant<bool, __k & 1>());}
-#ifndef __CHEERP__
     _LIBCPP_INLINE_VISIBILITY
     result_type __eval(true_type) {return __eval(__uratio<__k, _Rp>());}
 
@@ -3407,9 +3384,7 @@ private:
     result_type __eval2(false_type) {return __eval(__uratio<__k/2, 0x8000000000000000ull>());}
     _LIBCPP_INLINE_VISIBILITY
     result_type __eval2(true_type) {return __evalf<__k, 0>();}
-#endif
 
-#ifndef __CHEERP__
     template <uint64_t _Np, uint64_t _Dp>
         _LIBCPP_INLINE_VISIBILITY
         typename enable_if
@@ -3448,7 +3423,6 @@ private:
             _V_[__j] = __e_();
             return _Y_;
         }
-#endif
 };
 
 template<class _Engine, size_t __k>
@@ -3677,7 +3651,6 @@ seed_seq::generate(_RandomAccessIterator __first, _RandomAccessIterator __last)
 
 // generate_canonical
 
-#ifndef __CHEERP__
 template<class _RealType, size_t __bits, class _URNG>
 _RealType
 generate_canonical(_URNG& __g)
@@ -3697,7 +3670,6 @@ generate_canonical(_URNG& __g)
         _Sp += (__g() - _URNG::min()) * __base;
     return _Sp / __base;
 }
-#endif
 
 // uniform_int_distribution
 
@@ -3813,7 +3785,6 @@ public:
         {return !(__x == __y);}
 };
 
-#ifndef __CHEERP__
 template<class _RealType>
 template<class _URNG>
 inline _LIBCPP_INLINE_VISIBILITY
@@ -3824,7 +3795,6 @@ uniform_real_distribution<_RealType>::operator()(_URNG& __g, const param_type& _
         * _VSTD::generate_canonical<_RealType, numeric_limits<_RealType>::digits>(__g)
         + __p.a();
 }
-#endif
 
 template <class _CharT, class _Traits, class _RT>
 basic_ostream<_CharT, _Traits>&
@@ -4206,7 +4176,6 @@ public:
         {return !(__x == __y);}
 };
 
-#ifndef __CHEERP__
 template <class _RealType>
 template<class _URNG>
 _RealType
@@ -4220,7 +4189,6 @@ exponential_distribution<_RealType>::operator()(_URNG& __g, const param_type& __
                   )
                   / __p.lambda();
 }
-#endif
 
 template <class _CharT, class _Traits, class _RealType>
 basic_ostream<_CharT, _Traits>&
