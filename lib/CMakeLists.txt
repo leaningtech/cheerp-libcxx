@@ -419,8 +419,8 @@ if (LIBCXX_INSTALL_LIBRARY)
     set(experimental_lib cxx_experimental)
   endif()
   install(TARGETS ${LIBCXX_INSTALL_TARGETS} ${filesystem_lib} ${experimental_lib}
-    LIBRARY DESTINATION ${LIBCXX_INSTALL_PREFIX}lib${LIBCXX_LIBDIR_SUFFIX} COMPONENT cxx
-    ARCHIVE DESTINATION ${LIBCXX_INSTALL_PREFIX}lib${LIBCXX_LIBDIR_SUFFIX} COMPONENT cxx
+    LIBRARY DESTINATION lib/${CHEERP_MODE}/${LIBCXX_LIBDIR_SUFFIX} COMPONENT libcxx
+    ARCHIVE DESTINATION lib/${CHEERP_MODE}/${LIBCXX_LIBDIR_SUFFIX} COMPONENT libcxx
     )
   # NOTE: This install command must go after the cxx install command otherwise
   # it will not be executed after the library symlinks are installed.
