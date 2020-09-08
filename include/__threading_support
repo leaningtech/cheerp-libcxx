@@ -396,6 +396,15 @@ _LIBCPP_END_NAMESPACE_STD
 
 _LIBCPP_POP_MACROS
 
+#elif defined(__CHEERP__)
+
+#define _LIBCPP_NULL_THREAD 0U
+#define _LIBCPP_TLS_DESTRUCTOR_CC
+
+inline bool __libcpp_thread_isnull(const int *__t) {
+  return *__t == 0;
+}
+
 #endif // !_LIBCPP_HAS_NO_THREADS
 
 #endif // _LIBCPP_THREADING_SUPPORT
