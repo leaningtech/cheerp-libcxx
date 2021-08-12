@@ -1,6 +1,8 @@
 Cheerp: A C++ compiler for the Web
 ==================================
 
+This repo is outdated. Please refer to https://github.com/leaningtech/cheerp-compiler to build libcxx.
+
 Please report bugs on launchpad:
 https://bugs.launchpad.net/cheerp
 
